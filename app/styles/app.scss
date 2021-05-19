@@ -1,0 +1,36 @@
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('/assets/fonts/PressStart2P-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Zpix';
+  src: url('/assets/fonts/zpix.woff2');
+}
+
+html, body, pre, code, kbd, samp {
+  font-family: 'Press Start 2P', 'Zpix';
+}
+
+@import "ember-modal-dialog/ember-modal-structure";
+@import "ember-modal-dialog/ember-modal-appearance";
+
+// Utils
+@import 'utils';
+
+// Pages
+@import 'landing';
+
+// Components
+@import 'components/layout';
+
+// Custom
+.mb-create-room__badge {
+  width: 5.5em;
+}
+
+.mb-app-version {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+}

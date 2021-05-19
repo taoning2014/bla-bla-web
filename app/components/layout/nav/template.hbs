@@ -1,0 +1,28 @@
+<div
+  class="layout-nav display-flex justify-space-between align-items-center nes-container is-rounded is-dark m-0"
+>
+  <div>
+    <Avatar @character={{this.avatar}} @username={{this.username}} />
+  </div>
+  <div class="display-flex">
+    <div class="mr-4">
+      {{yield}}
+    </div>
+    <a
+      href="https://www.wenjuan.com/s/UZBZJv3abt/?sr=wenjuan_mini_app&sy=2"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="nes-btn is-error mr-4"
+    >
+      <i class="nes-icon is-small trophy"></i>
+    </a>
+    <LinkTo @route="authentication.create-room">
+      <span class="nes-btn is-warning mr-4">
+        Create room
+      </span>
+    </LinkTo>
+    <button type="button" class="nes-btn is-primary" {{on "click" this.logout}}>
+      Logout
+    </button>
+  </div>
+</div>

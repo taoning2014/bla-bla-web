@@ -1,0 +1,46 @@
+<Layout as |layout|>
+  <layout.body>
+    {{#if (eq this.currentState this.state.login)}}
+      <div class="nes-container with-title">
+        <p class="title">
+          Login to see our secret world
+        </p>
+        <div class="nes-field mb-4">
+          <label for="user-name">
+            Username
+          </label>
+          <Input type="text" id="user-name" class="nes-input" @value={{this.username}} placeholder="username" />
+        </div>
+        <div class="nes-field mb-4">
+          <label for="password">
+            Password
+          </label>
+          <Input type="password" id="password" class="nes-input" @value={{this.password}} placeholder="password" />
+        </div>
+        <div class="display-flex justify-space-between">
+          <button
+            type="button"
+            class="nes-btn is-primary m-0 {{if this.isLoginBtnDisabled " is-disabled"}}"
+            disabled={{this.isLoginBtnDisabled}}
+            {{on 'click' this.login}}
+          >
+            Login
+          </button>
+          <LinkTo @route="register">
+            <span class="nes-btn is-success">Register</span>
+          </LinkTo>
+        </div>
+      </div>
+    {{else if (eq this.currentState this.state.error)}}
+      <div class="nes-container with-title">
+        <p class="title">
+          Login error
+        </p>
+        <p class="nes-text is-error">
+          wrong password..
+        </p>
+        <button type="button" class="nes-btn is-primary" {{on 'click' this.reset}}>Try again</button>
+      </div>
+    {{/if}}
+  </layout.body>
+</Layout>

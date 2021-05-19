@@ -1,0 +1,132 @@
+<Layout as |layout|>
+  <layout.body>
+    {{#if (eq this.currentState this.state.signUp)}}
+      <div class="nes-container with-title">
+        <p class="title">
+          Let's get your passport ready ;)
+        </p>
+        <div class="mb-4">
+          <p class="nes-text is-primary">
+            Select your avatar
+          </p>
+          <div
+            class="display-flex justify-space-between align-items-flex-start flex-wrap"
+          >
+            <button
+              type="button"
+              {{on "click" (set this "selectAvatar" "nes-mario")}}
+            >
+              <Avatar
+                @character="nes-mario"
+                @status={{if (eq this.selectAvatar "nes-mario") "select"}}
+              />
+            </button>
+            <button
+              type="button"
+              {{on "click" (set this "selectAvatar" "nes-ash")}}
+            >
+              <Avatar
+                @character="nes-ash"
+                @status={{if (eq this.selectAvatar "nes-ash") "select"}}
+              />
+            </button>
+            <button
+              type="button"
+              {{on "click" (set this "selectAvatar" "nes-pokeball")}}
+            >
+              <Avatar
+                @character="nes-pokeball"
+                @status={{if (eq this.selectAvatar "nes-pokeball") "select"}}
+              />
+            </button>
+            <button
+              type="button"
+              {{on "click" (set this "selectAvatar" "nes-kirby")}}
+            >
+              <Avatar
+                @character="nes-kirby"
+                @status={{if (eq this.selectAvatar "nes-kirby") "select"}}
+              />
+            </button>
+          </div>
+        </div>
+        <div class="nes-field mb-4">
+          <label for="user-name">
+            Username
+          </label>
+          <Input
+            type="text"
+            id="user-name"
+            class="nes-input"
+            placeholder="username"
+            @value={{this.username}}
+            @key-up={{this.usernameKeyUp}}
+          />
+          {{#if this.usernameExceedLimit}}
+            <p class="nes-text is-error">
+              Username too long, it should be less than 8 chars
+            </p>
+          {{/if}}
+        </div>
+        <div class="nes-field mb-4">
+          <label for="password">
+            Password
+          </label>
+          <Input
+            type="password"
+            id="password"
+            class="nes-input"
+            @value={{this.password}}
+            @key-up={{this.passwordKeyUp}}
+            placeholder="password"
+          />
+        </div>
+        <div class="nes-field mb-4">
+          <label for="retype-password">
+            Retye password
+          </label>
+          <Input
+            type="password"
+            id="retype-password"
+            class="nes-input"
+            placeholder="retype password"
+            @value={{this.retypePassword}}
+            @key-up={{this.passwordKeyUp}}
+          />
+        </div>
+        <div class="display-flex justify-space-between">
+          <button
+            type="button"
+            class="nes-btn is-primary m-0
+              {{if this.isSignUpBtnDisabled " is-disabled"}}"
+            disabled={{this.isSignUpBtnDisabled}}
+            {{on "click" this.signUp}}
+          >
+            Sign up
+          </button>
+          <LinkTo @route="login">
+            <span class="nes-btn is-error">
+              Back
+            </span>
+          </LinkTo>
+        </div>
+      </div>
+    {{else if (eq this.currentState this.state.error)}}
+      <div class="nes-container with-title">
+        <p class="title">
+          Sign up error
+        </p>
+        <p class="nes-text is-error">
+          Username already exist
+        </p>
+        <button
+          type="button"
+          class="nes-btn is-primary"
+          {{on "click" this.reset}}
+        >
+          Try different name
+        </button>
+      </div>
+    {{/if}}
+  </layout.body>
+</Layout>

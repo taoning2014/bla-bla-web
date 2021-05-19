@@ -1,0 +1,38 @@
+<div class="nes-container with-title">
+  <p class="title">
+    Share
+  </p>
+  <textarea
+    id="textarea_field"
+    rows="5"
+    value={{this.shareText}}
+    readonly={{true}}
+    class="nes-textarea"
+  ></textarea>
+  {{#if this.isCopyLinkSucceed}}
+    <p class="nes-text is-primary">
+      Link copied
+    </p>
+  {{/if}}
+  {{#if this.isCopyLinkFail}}
+    <p class="nes-text is-error">
+      Your browser forbids text copying. Please select and copy the text in the box yourself.
+    </p>
+  {{/if}}
+  <div class="display-flex justify-space-between mt-4">
+    <button
+      type="button"
+      class="nes-btn is-primary m-0"
+      {{on "click" this.copyLink}}
+    >
+      Copy & Share
+    </button>
+    {{#unless @hideGoToRoom}}
+      <LinkTo @route="authentication.room" @model={{@roomId}}>
+        <span class="nes-btn is-success m-0">
+          Go to the room
+        </span>
+      </LinkTo>
+    {{/unless}}
+  </div>
+</div>

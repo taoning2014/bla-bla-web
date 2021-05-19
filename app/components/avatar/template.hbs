@@ -1,0 +1,29 @@
+<div class="inline-flex flex-column align-items-center">
+  <div class="display-flex justify-center">
+    <i class={{@character}}></i>
+  </div>
+  <span class="nes-text is-primary display-flex align-items-center">
+    {{truncate @username 10}}
+    {{#if (eq @state this.userState.MUTED)}}
+      <svg class="nes-text is-error mr-2" width="24" height="24">
+        <use xlink:href="/assets/icons/bootstrap-icons.svg#mic-mute-fill"></use>
+      </svg>
+    {{else if (eq @state this.userState.SPEAK)}}
+      <svg class="nes-text is-success mr-2" width="24" height="24">
+        <use xlink:href="/assets/icons/bootstrap-icons.svg#volume-up"></use>
+      </svg>
+    {{else if (eq @state this.userState.RAISE_HAND)}}
+      <svg class="nes-text is-success mr-2" width="24" height="24">
+        <use
+          xlink:href="/assets/icons/bootstrap-icons.svg#chat-left-text-fill"
+        ></use>
+      </svg>
+    {{/if}}
+  </span>
+  <span class="nes-text is-warning">
+    {{@status}}
+  </span>
+  <span>
+    {{yield}}
+  </span>
+</div>

@@ -1,0 +1,44 @@
+.layout-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-nav {
+  height: 10vh;
+  min-height: 130px;
+}
+
+.layout-head {
+  min-height: 10vh;
+}
+
+.layout-body {
+  display: flex;
+  position: relative;
+  flex-grow: 1;
+
+  &.layout-body--2-columns{
+    margin-left: 24px;
+    .layout-body__container {
+      position: relative;
+      transform: none;
+      top: 0;
+      left: 0;
+    }
+  }
+}
+
+.layout-body__container {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+@media all and (min-width: 800px) {
+  .layout-body__container {
+    width: 800px;
+  }
+}

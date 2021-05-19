@@ -1,0 +1,12 @@
+i18n:
+  hello_world: Hello World!
+  start_room: + Start a room
+  let_us_go: 🎉 Let's go
+  start_new_room_title: Start new room
+  start_new_room_content: Labore repellendus quia doloremque iure. Sed reprehenderit molestiae in. Vero dignissimos accusantium illo nulla voluptatem reiciendis rerum odio.
+  no_room: No available room
+  not_find_room: We didn’t find any rooms.
+  open: Open
+  social: Social
+  closed: Closed
+

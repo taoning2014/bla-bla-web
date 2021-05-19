@@ -7,11 +7,10 @@ const DEFAULT_DESCRIPTION = 'Welcome Friends';
 
 export default class LayoutHeadComponent extends Component {
   @service authentication;
-  @service roomNotice;
   @service router;
 
   get avatar() {
-    return this.authentication.getAvatar();
+    return this.authentication.avatar;
   }
 
   get username() {

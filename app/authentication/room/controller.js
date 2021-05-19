@@ -2,22 +2,14 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import AgoraRTC from 'agora-rtc-sdk-ng';
-import ENV from 'metal-bat-web/config/environment';
 import {
   AGORA_NETWORK_QUALITY_MAP,
   ROOM_STATE,
   USER_ROLE,
   USER_STATE,
 } from 'metal-bat-web/utils/constants';
-import createRoomUser from 'metal-bat-web/utils/create-room-user';
-import {
-  addUser,
-  removeUser,
-  updateUserState,
-} from 'metal-bat-web/utils/user-helper';
-import setVolume from 'metal-bat-web/utils/set-volume';
-import { TrackedArray, TrackedObject } from 'tracked-built-ins';
+import { TrackedMap } from 'tracked-built-ins';
+import { AVModelToTrackedObject } from 'metal-bat-web/utils/data-helpers';
 export default class AuthenticationRoomController extends Controller {
   state = ROOM_STATE;
   userState = USER_STATE;
@@ -27,23 +19,38 @@ export default class AuthenticationRoomController extends Controller {
   @service liveQuery;
   @service roomNotice;
   @service router;
+  @service call;
 
   @tracked currentState;
+  @tracked openReactionsMenu = false;
 
-  hosts = new TrackedArray([]);
-  guests = new TrackedArray([]);
-
-  /**
-   * @property {AgoraRTCClient} - The local client with basic functions for a voice or video call, such as joining a channel, publishing tracks, or subscribing to tracks.
-   * @see {@link https://docs.agora.io/en/Voice/API%20Reference/web_ng/interfaces/iagorartcclient.html}
-   */
-  client;
+  @tracked roomUsers = new TrackedMap(); // <string UserId, TrackedObject RoomUser>
 
   /**
-   * @property {LocalAudioTrack} - The basic interface for local audio tracks, providing main methods of local audio tracks.
-   * @see {@link https://docs.agora.io/en/Voice/API%20Reference/web_ng/interfaces/ilocalaudiotrack.html}
+   * Views into roomUsers
    */
-  localAudioTrack;
+  get admins() {
+    return Array.from(this.roomUsers.values()).filterBy(
+      'role',
+      USER_ROLE.ADMIN
+    );
+  }
+  get hosts() {
+    // Put admins first, then the rest of the hosts after
+    return [
+      ...this.admins,
+      ...Array.from(this.roomUsers.values()).filterBy('role', USER_ROLE.HOST),
+    ];
+  }
+  get guests() {
+    return Array.from(this.roomUsers.values()).filterBy(
+      'role',
+      USER_ROLE.GUEST
+    );
+  }
+  get me() {
+    return this.getRoomUser(this.authentication.getUserId());
+  }
 
   get canHostAGuest() {
     /**
@@ -51,12 +58,19 @@ export default class AuthenticationRoomController extends Controller {
      * Refer: https://docs.agora.io/en/Voice/faq/capacity
      */
     const HOST_USERS_THRESHOLD = 10;
-    return this.hosts.length < HOST_USERS_THRESHOLD && this.me.role === USER_ROLE.ADMIN;
+    return this.hosts.length < HOST_USERS_THRESHOLD && this.isAdmin;
+  }
+
+  get isAdmin() {
+    return this.me.role === USER_ROLE.ADMIN;
+  }
+  get isGuest() {
+    return this.me.role === USER_ROLE.GUEST;
   }
 
   async join() {
+    await this.findRoomUsers();
     await this.createRoomUser();
-    await this.fetchRoomUsers();
     await this.joinChat();
   }
 
@@ -64,71 +78,41 @@ export default class AuthenticationRoomController extends Controller {
     const userId = this.authentication.getUserId();
     const adminUserId = this.model.adminUser;
     const isAdminUser = adminUserId === userId;
-    const RoomUser = this.liveQuery.AV.Object.extend('RoomUser');
-    let [roomUser] = await this.findRoomUsers(userId);
+    let roomUser = this.me;
 
     if (roomUser) {
-      roomUser.get('role') === USER_ROLE.GUEST
+      roomUser.role === USER_ROLE.GUEST
         ? roomUser.set('state', USER_STATE.IDLE)
         : roomUser.set('state', USER_STATE.MUTED);
+      roomUser.set('avatar', this.authentication.avatar);
       await roomUser.save();
-      this.me = new TrackedObject({
-        ...roomUser.toJSON(),
-      });
       return;
     }
 
     if (isAdminUser) {
-      roomUser = await createRoomUser(RoomUser, {
+      roomUser = await this.liveQuery.createRoomUser({
         roomId: this.roomId,
-        userId: userId,
+        userId,
         username: this.authentication.getUsername(),
-        avatar: this.authentication.getAvatar(),
+        avatar: this.authentication.avatar,
         role: USER_ROLE.ADMIN,
         state: USER_STATE.MUTED,
         isSelf: true,
       });
     } else {
-      roomUser = await createRoomUser(RoomUser, {
+      roomUser = await this.liveQuery.createRoomUser({
         roomId: this.roomId,
-        userId: userId,
+        userId,
         username: this.authentication.getUsername(),
-        avatar: this.authentication.getAvatar(),
+        avatar: this.authentication.avatar,
         role: USER_ROLE.GUEST,
         state: USER_STATE.IDLE,
       });
     }
 
-    this.me = new TrackedObject({
-      ...roomUser.toJSON(),
-    });
-  }
-
-  async fetchRoomUsers() {
-    const roomUsers = await this.findRoomUsers();
-
-    roomUsers.forEach((item) => {
-      // use unshift to make sure admin renders in front of the other hosts
-      if (item.get('role') == USER_ROLE.ADMIN) {
-        this.hosts.unshift(
-          new TrackedObject({
-            ...item.toJSON(),
-          })
-        );
-      } else if (item.get('role') == USER_ROLE.HOST) {
-        this.hosts.push(
-          new TrackedObject({
-            ...item.toJSON(),
-          })
-        );
-      } else if (item.get('role') == USER_ROLE.GUEST) {
-        this.guests.push(
-          new TrackedObject({
-            ...item.toJSON(),
-          })
-        );
-      }
-    });
+    // Push ourselves onto the room users
+    this.roomUsers.set(userId, AVModelToTrackedObject(roomUser));
+    return;
   }
 
   async joinChat() {
@@ -136,96 +120,82 @@ export default class AuthenticationRoomController extends Controller {
   }
 
   async setUpAgora() {
-    AgoraRTC.setLogLevel(4);
-    this.client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
-    const userId = this.authentication.getUserId();
-    let token;
+    await this.call.startCall(this.roomId, {
+      'stream-message': (userId, message) => {
+        const textMessage = new TextDecoder().decode(message);
+        const guest = this.getRoomUser(userId);
+        if (guest) {
+          guest.reaction = textMessage;
 
-    try {
-      const tokenResponse = await fetch(
-        `${ENV.BLA_BLA_API}?channel=${this.roomId}&user=${userId}`,
-        {
-          mode: 'cors',
+          if (guest.reactionTimeoutId) {
+            clearTimeout(guest.reactionTimeoutId);
+          }
+
+          guest.reactionTimeoutId = setTimeout(function () {
+            guest.reaction = undefined;
+            guest.reactionTimeoutId = undefined;
+          }, 10000);
         }
-      );
-      const tokenObj = await tokenResponse.json();
-      token = tokenObj.token;
-    } catch (e) {
-      this.currentState = this.state.ERROR.API_SERVER;
-      return;
-    }
+      },
+
+      'user-joined': async ({ uid }) => {
+        // check to avoid duplicate push
+        if (this.getRoomUser(uid)) {
+          return;
+        }
+
+        const [roomUser] = await this.findRoomUsers(uid);
+
+        this.roomNotice.push({
+          displayTimeMs: 2000,
+          type: 'is-primary',
+          message: `@${roomUser.get('username')} joined the room`,
+        });
+      },
+
+      /**
+       * In the case of user close the browser tab(instead of click "leave" button), we can use Agora's 'user-left' event
+       * to remove this user from the UI.
+       */
+      'user-left': async ({ uid }) => {
+        const [roomUser] = await this.findRoomUsers(uid);
+
+        this.roomNotice.push({
+          displayTimeMs: 2000,
+          type: '',
+          message: `@${roomUser.get('username')} left the room`,
+        });
+
+        // remove user from the glimmer tracked array, so that it disappear from the UI
+        this.roomUsers.delete(uid);
+      },
+
+      'network-quality': (stats) => {
+        if (!this.me) {
+          return;
+        }
+        this.me.downlinkNetworkQuality =
+          AGORA_NETWORK_QUALITY_MAP[stats.downlinkNetworkQuality];
+        this.me.uplinkNetworkQuality =
+          AGORA_NETWORK_QUALITY_MAP[stats.uplinkNetworkQuality];
+      },
+
+      'volume-indicator': (volumes) => {
+        volumes.forEach((item) => {
+          const { level, uid } = item;
+          const roomUser = this.getRoomUser(uid);
+          if (roomUser && roomUser.state !== USER_STATE.MUTED) {
+            roomUser.state = level > 5 ? USER_STATE.SPEAK : USER_STATE.IDLE;
+          }
+        });
+      },
+    });
 
     try {
-      await this.client.join(ENV.AGORA_ENV.APP_ID, this.roomId, token, userId);
       this.currentState = this.state.READY;
     } catch (e) {
       this.currentState = this.state.ERROR.AGORA_CONNECT_FAIL;
     }
-
-    this.client.on('user-published', async (user, mediaType) => {
-      await this.client.subscribe(user, mediaType);
-      if (mediaType === 'audio') {
-        const remoteAudioTrack = user.audioTrack;
-        remoteAudioTrack.play();
-      }
-    });
-
-    this.client.on('user-joined', async ({ uid }) => {
-      const [roomUser] = await this.findRoomUsers(uid);
-      const role = roomUser.get('role');
-      const userId = roomUser.get('userId');
-
-      // check to avoid duplicate push
-      if ([...this.hosts, ...this.guests].findBy('userId', userId)) {
-        return;
-      }
-
-      this.roomNotice.push({
-        dispalyTimeMs: 2000,
-        type: 'is-primary',
-        message: `@${roomUser.get('username')} joined the room`,
-      });
-
-      // use unshift to make sure admin renders in front of the other hosts
-      if (role === USER_ROLE.ADMIN) {
-        this.hosts.unshift(new TrackedObject({ ...roomUser.toJSON() }));
-      } else if (role === USER_ROLE.HOST) {
-        this.hosts.push(new TrackedObject({ ...roomUser.toJSON() }));
-      } else if (role === USER_ROLE.GUEST) {
-        this.guests.push(new TrackedObject({ ...roomUser.toJSON() }));
-      }
-    });
-
-    /**
-     * In the case of user close the browser tab(instead of click "leave" button), we can use Agora's 'user-left' event
-     * to remove this user from the UI.
-     */
-    this.client.on('user-left', async ({ uid }) => {
-      const [roomUser] = await this.findRoomUsers(uid);
-
-      this.roomNotice.push({
-        dispalyTimeMs: 2000,
-        type: '',
-        message: `@${roomUser.get('username')} left the room`,
-      });
-
-      removeUser(this.hosts, this.guests, uid);
-    });
-
-    this.client.on('network-quality', (stats) => {
-      this.me.downlinkNetworkQuality =
-        AGORA_NETWORK_QUALITY_MAP[stats.downlinkNetworkQuality];
-      this.me.uplinkNetworkQuality =
-        AGORA_NETWORK_QUALITY_MAP[stats.uplinkNetworkQuality];
-    });
-
-    this.client.enableAudioVolumeIndicator();
-    this.client.on('volume-indicator', (volumes) => {
-      volumes.forEach((item) => {
-        const { level, uid } = item;
-        setVolume(this.hosts, uid, level);
-      });
-    });
   }
 
   async setUpLiveQuery() {
@@ -246,79 +216,52 @@ export default class AuthenticationRoomController extends Controller {
     this._roomUserLiveQuery = await roomUserQuery.subscribe();
     this._roomUserLiveQuery.on('update', async (guest, [updateKey]) => {
       const userId = this.authentication.getUserId();
+      const guestId = guest.get('userId');
+      let roomUser = this.getRoomUser(guestId);
 
       if (updateKey === 'role') {
-        if (guest.get('role') === USER_ROLE.HOST) {
-          const user = updateUserState(
-            this.guests,
-            guest.get('userId'),
-            USER_STATE.MUTED
-          );
+        roomUser.role = guest.get('role');
 
-          this.guests.removeObject(user);
-          addUser(this.hosts, user);
+        if (guest.get('role') === USER_ROLE.HOST) {
+          roomUser.state = USER_STATE.MUTED;
 
           this.roomNotice.push({
-            dispalyTimeMs: 2000,
+            displayTimeMs: 2000,
             type: 'is-success',
             message: `@${guest.get('username')} becomes host`,
           });
-
-          if (guest.get('userId') === userId) {
-            this.me.role = USER_ROLE.HOST;
-            this.me.state = USER_STATE.MUTED;
-          }
         } else if (guest.get('role') === USER_ROLE.GUEST) {
-          const user = updateUserState(
-            this.hosts,
-            guest.get('userId'),
-            USER_STATE.IDLE
-          );
-
-          this.hosts.removeObject(user);
-          addUser(this.guests, user);
+          roomUser.state = USER_STATE.IDLE;
 
           this.roomNotice.push({
-            dispalyTimeMs: 2000,
+            displayTimeMs: 2000,
             type: 'is-error',
             message: `@${guest.get('username')} becomes audience`,
           });
 
-          if (guest.get('userId') === userId) {
-            this.me.role = USER_ROLE.GUEST;
-            this.me.state = USER_STATE.IDLE;
-            this.localAudioTrack?.setEnabled(false);
+          if (guestId === userId) {
+            this.call.mute();
           }
         }
       }
 
       if (updateKey === 'state') {
+        roomUser.state = guest.get('state');
+
         switch (guest.get('state')) {
           case USER_STATE.MUTED:
             {
-              updateUserState(
-                this.hosts,
-                guest.get('userId'),
-                USER_STATE.MUTED
-              );
-
               if (guest.get('userId') !== userId) {
                 return;
               }
 
-              this.localAudioTrack?.setEnabled(false);
+              this.call.mute();
             }
             break;
           case USER_STATE.RAISE_HAND:
             {
-              updateUserState(
-                this.guests,
-                guest.get('userId'),
-                USER_STATE.RAISE_HAND
-              );
-
               this.roomNotice.push({
-                dispalyTimeMs: 5000,
+                displayTimeMs: 5000,
                 type: 'is-success',
                 message: `@${guest.get('username')} is raising hand`,
               });
@@ -326,23 +269,17 @@ export default class AuthenticationRoomController extends Controller {
             break;
           case USER_STATE.SPEAK:
             /**
-             * Due to we are pulling from Agora every 2s, set speak on lean could model is expensive. So we decide to
+             * Due to we are pulling from Agora every 2s, set speak on LeanCloud model is expensive. So we decide to
              * set it in 'volume-indicator
              */
             break;
           case USER_STATE.IDLE: {
-            updateUserState(
-              [...this.hosts, ...this.guests],
-              guest.get('userId'),
-              USER_STATE.IDLE
-            );
-
             if (
               guest.get('role') === USER_ROLE.ADMIN ||
               guest.get('role') === USER_ROLE.HOST
             ) {
               this.roomNotice.push({
-                dispalyTimeMs: 2000,
+                displayTimeMs: 2000,
                 type: 'is-primary',
                 message: `@${guest.get('username')} is unmuted`,
               });
@@ -353,11 +290,8 @@ export default class AuthenticationRoomController extends Controller {
     });
   }
 
-  async destroyCurrentUser(userId) {
-    const [roomUser] = await this.findRoomUsers(userId);
-    if (roomUser) {
-      await this.liveQuery.AV.Object.destroyAll([roomUser]);
-    }
+  getRoomUser(userId) {
+    return userId && this.roomUsers.get(userId);
   }
 
   /**
@@ -365,6 +299,11 @@ export default class AuthenticationRoomController extends Controller {
    * @returns
    */
   async findRoomUsers(userId) {
+    // If we have the user already, return them and avoid a roundtrip to leancloud
+    if (this.getRoomUser(userId)) {
+      return [this.getRoomUser(userId)];
+    }
+
     const roomUserQuery = new this.liveQuery.AV.Query('RoomUser');
     roomUserQuery.equalTo('roomId', this.roomId);
 
@@ -373,22 +312,50 @@ export default class AuthenticationRoomController extends Controller {
     }
 
     const roomUsers = await roomUserQuery.find();
+
+    // Update the TrackedMap roomUsers with all of the new records returned
+    roomUsers.forEach((roomUser) => {
+      // Update roomUsers map
+      this.roomUsers.set(
+        roomUser.get('userId'),
+        AVModelToTrackedObject(roomUser)
+      );
+    });
+
     return roomUsers;
+  }
+
+  async disconnectUser() {
+    if (this.isDisconnectUser) {
+      return;
+    }
+
+    // disconnect call
+    await this.call.end();
+
+    // remove roomUser from LeanCloud
+    if (this.me) {
+      this.me.destroy();
+    }
+
+    // unsubscribe live query
+    this._roomLiveQuery.unsubscribe();
+    this._roomUserLiveQuery.unsubscribe();
+
+    this.isDisconnectUser = true;
   }
 
   @action
   async toggleHost(userId) {
     this.me.isSaving = true;
 
-    const [roomUser] = await this.findRoomUsers(userId);
+    const roomUser = this.getRoomUser(userId);
     if (!roomUser) {
       return;
     }
 
     const newRole =
-      roomUser.get('role') === USER_ROLE.HOST
-        ? USER_ROLE.GUEST
-        : USER_ROLE.HOST;
+      roomUser.role === USER_ROLE.HOST ? USER_ROLE.GUEST : USER_ROLE.HOST;
 
     roomUser.set('role', newRole);
     if (newRole === USER_ROLE.GUEST) {
@@ -405,16 +372,14 @@ export default class AuthenticationRoomController extends Controller {
   async toggleRaiseHand() {
     this.me.isSaving = true;
 
-    const userId = this.authentication.getUserId();
-    const [roomUser] = await this.findRoomUsers(userId);
-    const state = roomUser.get('state');
     const newState =
-      state === USER_STATE.RAISE_HAND ? USER_STATE.IDLE : USER_STATE.RAISE_HAND;
+      this.me.state === USER_STATE.RAISE_HAND
+        ? USER_STATE.IDLE
+        : USER_STATE.RAISE_HAND;
 
-    roomUser.set('state', newState);
-    await roomUser.save();
+    this.me.set('state', newState);
+    await this.me.save();
 
-    this.me.state = newState;
     this.me.isSaving = false;
   }
 
@@ -422,11 +387,8 @@ export default class AuthenticationRoomController extends Controller {
   async closeRoom() {
     this.me.isSaving = true;
 
-    // disconnect with Agora
-    this.localAudioTrack?.close();
-    this.client?.leave();
-
-    // delete all roomUsers in this room
+    await this.disconnectUser();
+    // delete other roomUsers in this room
     const roomUsers = await this.findRoomUsers();
     await this.liveQuery.AV.Object.destroyAll(roomUsers);
 
@@ -434,10 +396,6 @@ export default class AuthenticationRoomController extends Controller {
     const roomQuery = new this.liveQuery.AV.Query('Room');
     const room = await roomQuery.get(this.roomId);
     await room.destroy();
-
-    // unsubscribe live query
-    this._roomLiveQuery.unsubscribe();
-    this._roomUserLiveQuery.unsubscribe();
 
     this.currentState = this.state.CLOSED;
     this.me.isSaving = false;
@@ -447,52 +405,33 @@ export default class AuthenticationRoomController extends Controller {
   async leaveRoom() {
     this.me.isSaving = true;
 
-    // disconnect with Agora
-    this.localAudioTrack?.close();
-    await this.client?.leave();
-
-    // remove roomUser
-    const userId = this.authentication.getUserId();
-    removeUser(this.hosts, this.guests, userId);
-
-    // unsubscribe live query
-    this._roomLiveQuery.unsubscribe();
-    this._roomUserLiveQuery.unsubscribe();
+    await this.disconnectUser();
 
     this.me.isSaving = false;
     this.router.transitionTo('authentication.home');
   }
 
   @action
-  toggleStats() {
-    this.me.showStats = !this.me.showStats;
-  }
-
-  @action
   async toggleMute() {
     this.me.isSaving = true;
 
-    const userId = this.authentication.getUserId();
-    const [roomUser] = await this.findRoomUsers(userId);
-    const state = roomUser.get('state');
-    const newState =
-      state === USER_STATE.MUTED ? USER_STATE.IDLE : USER_STATE.MUTED;
+    const shouldSpeak = this.me.state === USER_STATE.MUTED;
 
-    roomUser.set('state', newState);
-    await roomUser.save();
-
-    if (newState === USER_STATE.MUTED) {
-      this.localAudioTrack.setEnabled(false);
+    if (shouldSpeak) {
+      await this.call.unmute();
     } else {
-      if (!this.localAudioTrack) {
-        this.localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-        await this.client.publish([this.localAudioTrack]);
-      } else {
-        this.localAudioTrack.setEnabled(true);
-      }
+      await this.call.mute();
     }
 
-    this.me.state = newState;
+    this.me.set('state', shouldSpeak ? USER_STATE.IDLE : USER_STATE.MUTED);
+    await this.me.save();
+
     this.me.isSaving = false;
+  }
+
+  @action
+  react(reaction) {
+    this.openReactionsMenu = false;
+    this.call.sendTextMessage(reaction);
   }
 }

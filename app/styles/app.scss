@@ -8,21 +8,38 @@
   src: url('/assets/fonts/zpix.woff2');
 }
 
-html, body, pre, code, kbd, samp {
+html,
+body,
+pre,
+code,
+kbd,
+samp {
   font-family: 'Press Start 2P', 'Zpix';
 }
 
-@import "ember-modal-dialog/ember-modal-structure";
-@import "ember-modal-dialog/ember-modal-appearance";
+@import 'ember-modal-dialog/ember-modal-structure';
+@import 'ember-modal-dialog/ember-modal-appearance';
 
 // Utils
 @import 'utils';
 
-// Pages
-@import 'landing';
-
 // Components
 @import 'components/layout';
+
+// Avatars
+@import 'avatars/big-stinky-pete';
+@import 'avatars/camel';
+@import 'avatars/lineshooter';
+@import 'avatars/shine-stein';
+@import 'avatars/tight-fisted';
+@import 'avatars/yardbird';
+@import 'avatars/nao-nao';
+
+// Reactions
+@import 'reactions/coin';
+@import 'reactions/curious';
+@import 'reactions/like';
+@import 'reactions/love';
 
 // Custom
 .mb-create-room__badge {
@@ -30,7 +47,17 @@ html, body, pre, code, kbd, samp {
 }
 
 .mb-app-version {
-  position: absolute;
+  position: fixed;
   bottom: 24px;
   right: 24px;
+}
+
+.mb-room a {
+  &,
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+    color: inherit;
+  }
 }

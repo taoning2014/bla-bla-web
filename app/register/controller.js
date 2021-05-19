@@ -66,4 +66,9 @@ export default class RegisterController extends Controller {
   passwordKeyUp() {
     this.isEnteredSamePassword = this.password === this.retypePassword;
   }
+
+  @action
+  chooseAvatar(avatar) {
+    this.selectAvatar = avatar;
+  }
 }

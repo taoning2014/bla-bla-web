@@ -5,10 +5,12 @@ export default class AuthenticationRoute extends Route {
   @service authentication;
   @service router;
 
-  beforeModel() {
+  beforeModel(transition) {
     const isUserAlreadyLogin = this.authentication.isLogin();
     if (!isUserAlreadyLogin) {
-      this.router.transitionTo('landing');
+      const loginController = this.controllerFor('login');
+      loginController.previousTransition = transition;
+      this.router.transitionTo('login');
     }
   }
 }

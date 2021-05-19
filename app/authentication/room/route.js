@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 export default class AuthenticationRoomRoute extends Route {
   @service liveQuery;
 
@@ -23,14 +24,22 @@ export default class AuthenticationRoomRoute extends Route {
     super.setupController(controller, model);
 
     if (this.isLeanCloudError) {
-      controller.currentState = controller.state.ERROR.LEAN_COULD;
+      controller.currentState = controller.state.ERROR.LEAN_CLOUD;
       return;
     }
 
     controller.currentState = controller.state.LOADING;
     controller.roomId = this.roomId;
-    controller.hosts.clear();
-    controller.guests.clear();
     controller.join();
+    controller.isDisconnectUser = false;
+  }
+
+  resetController(controller) {
+    controller.roomUsers.clear();
+  }
+
+  @action
+  willTransition() {
+    this.controller.disconnectUser();
   }
 }

@@ -9,7 +9,11 @@
     </button>
   </layout.nav>
   <layout.head />
-  <layout.body />
+  <layout.body class='mb-room'>
+    {{#each this.model.rooms as |room|}}
+      <Room @room={{room}} />
+    {{/each}}
+  </layout.body>
 </Layout>
 {{#if this.isShowReleaseModal}}
   <ModalDialog @translucentOverlay={{true}}>

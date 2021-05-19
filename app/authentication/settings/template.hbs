@@ -1,0 +1,94 @@
+<Layout as |layout|>
+  <layout.nav />
+  <layout.body>
+    {{#if (eq this.currentState this.state.setting)}}
+      <div class="nes-container with-title mb-4">
+        <p class="title">
+          Change your avatar
+        </p>
+        <div
+          class="display-flex justify-space-between align-items-flex-start flex-wrap mb-5"
+        >
+          <AvatarSelector
+            @chooseAvatar={{this.chooseAvatar}}
+            @currentAvatar={{this.avatar}}
+          />
+        </div>
+      </div>
+
+      <div class="nes-container with-title mb-4">
+        <p class="title">
+          Update your information
+        </p>
+        <div class="nes-field mb-4">
+          {{#if this.authentication.email}}
+            <p>
+              <span>Current email:{{this.authentication.email}}</span>
+              {{#if this.authentication.emailVerified}}
+                <span class="nes-text is-success">verified</span>
+              {{else}}
+                <span class="nes-text is-warning">not verified</span>
+                {{#if this.isVerifyEmailSend}}
+                  <span>email sent</span>
+                {{else}}
+                  <button
+                    type="button"
+                    {{on "click" this.verifyEmail}}
+                  >resend verification</button>
+                {{/if}}
+              {{/if}}
+            </p>
+          {{/if}}
+          <label for="user-email">
+            email
+          </label>
+          <Input
+            type="email"
+            id="user-email"
+            class="nes-input"
+            @value={{this.email}}
+            @key-up={{set this "isSaved" false}}
+            placeholder="email"
+          />
+        </div>
+      </div>
+
+      <div class="nes-container with-title">
+        <p class="title">
+          Controls
+        </p>
+        <div class="display-flex justify-space-between">
+          <div>
+            <button
+              type="button"
+              class="nes-btn is-primary m-0
+                {{if this.isSaveBtnDisabled " is-disabled"}}"
+              disabled={{this.isSaveBtnDisabled}}
+              {{on "click" this.save}}
+            >
+              Save
+            </button>
+            {{#if this.isSaved}}
+              <span class="nes-text is-success">change saved</span>
+            {{/if}}
+          </div>
+          <LinkTo @route="authentication.home" class="nes-btn is-primary">
+            Back to home
+          </LinkTo>
+        </div>
+      </div>
+    {{else if (eq this.currentState this.state.error)}}
+      <div class="nes-container with-title">
+        <p class="title">
+          Error happens
+        </p>
+        <p class="nes-text is-error">
+          There are some error happened, the change is not saved
+        </p>
+        <LinkTo @route="authentication.home" class="nes-btn is-primary">
+          Back to home
+        </LinkTo>
+      </div>
+    {{/if}}
+  </layout.body>
+</Layout>

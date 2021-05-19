@@ -1,0 +1,15 @@
+<LinkTo @class="nes-container is-rounded mb-4" @route="authentication.room" @model={{@room.objectId}}>
+  {{#if @room.scheduledTime}}
+    <p class="nes-text is-warning">Scheduled Time: {{display-date @room.scheduledTime}}</p>
+  {{/if}}
+  <p>Room Title: {{@room.title}}</p>
+  {{#if @room.description.description}}
+    <p>Room Description: {{@room.description.description}}</p>
+  {{/if}}
+  <Avatar
+    @character={{@room.adminUserAvatar}}
+    @username={{@room.adminUsername}}
+  >
+    <span class="nes-text is-success">Room Admin</span>
+  </Avatar>
+</LinkTo>

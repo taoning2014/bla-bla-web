@@ -12,42 +12,7 @@
           <div
             class="display-flex justify-space-between align-items-flex-start flex-wrap"
           >
-            <button
-              type="button"
-              {{on "click" (set this "selectAvatar" "nes-mario")}}
-            >
-              <Avatar
-                @character="nes-mario"
-                @status={{if (eq this.selectAvatar "nes-mario") "select"}}
-              />
-            </button>
-            <button
-              type="button"
-              {{on "click" (set this "selectAvatar" "nes-ash")}}
-            >
-              <Avatar
-                @character="nes-ash"
-                @status={{if (eq this.selectAvatar "nes-ash") "select"}}
-              />
-            </button>
-            <button
-              type="button"
-              {{on "click" (set this "selectAvatar" "nes-pokeball")}}
-            >
-              <Avatar
-                @character="nes-pokeball"
-                @status={{if (eq this.selectAvatar "nes-pokeball") "select"}}
-              />
-            </button>
-            <button
-              type="button"
-              {{on "click" (set this "selectAvatar" "nes-kirby")}}
-            >
-              <Avatar
-                @character="nes-kirby"
-                @status={{if (eq this.selectAvatar "nes-kirby") "select"}}
-              />
-            </button>
+            <AvatarSelector @chooseAvatar={{this.chooseAvatar}} />
           </div>
         </div>
         <div class="nes-field mb-4">
@@ -83,7 +48,7 @@
         </div>
         <div class="nes-field mb-4">
           <label for="retype-password">
-            Retye password
+            Retype password
           </label>
           <Input
             type="password"

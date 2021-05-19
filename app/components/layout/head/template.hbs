@@ -1,5 +1,5 @@
 <div
-  class="layout-head display-flex justify-space-between align-items-center flex-wrap"
+  class="layout-head display-flex justify-space-between align-items-center flex-wrap pv-2"
 >
   <div class="ml-6">
     <p>
@@ -21,11 +21,10 @@
     </p>
   </div>
   <div class="display-flex">
-    {{#if this.roomNotice.notice}}
-      <p class="nes-balloon from-right align-self-flex-start">
-        <span class="nes-text {{this.roomNotice.notice.type}}">{{this.roomNotice.notice.message}}</span>
-      </p>
+    {{#if (has-block)}}
+      {{yield}}
+    {{else}}
+      <i class="nao-nao animate"></i>
     {{/if}}
-    <i class="nes-octocat {{if this.roomNotice.notice " mt-6 animate"}}"></i>
   </div>
 </div>

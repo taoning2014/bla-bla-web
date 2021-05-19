@@ -1,5 +1,9 @@
+export const ONE_MIN = 60 * 1000;
+export const ONE_HOUR = 60 * ONE_MIN;
+export const ONE_DAY = 24 * ONE_HOUR;
+
 export const AGORA_NETWORK_QUALITY_MAP = {
-  0: 'Unknow',
+  0: 'Unknown',
   1: 'Excellent',
   2: 'Good',
   3: 'Fair',
@@ -8,11 +12,11 @@ export const AGORA_NETWORK_QUALITY_MAP = {
   6: 'Offline',
 };
 
-export const FEASURE_LIST = {
+export const FEATURE_LIST = {
   SHOW_RELEASE_MODAL: 'showReleaseModal',
 };
 
-export const LEAN_COULD_ERROR_CODE = {
+export const LEAN_CLOUD_ERROR_CODE = {
   CLASS_DOES_NOT_EXIST: 101,
 };
 
@@ -22,7 +26,7 @@ export const ROOM_STATE = {
   LOADING: 'loading',
   ERROR: {
     API_SERVER: 'API server error',
-    LEAN_COULD: 'lean could error',
+    LEAN_CLOUD: 'LeanCloud error',
     AGORA_CONNECT_FAIL: 'agora error',
   },
   CLOSED: 'closed',

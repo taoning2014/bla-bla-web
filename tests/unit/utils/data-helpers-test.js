@@ -1,11 +1,11 @@
-import setVolume from 'metal-bat-web/utils/set-volume';
+import dataHelpers from 'metal-bat-web/utils/data-helpers';
 import { module, test } from 'qunit';
 
-module('Unit | Utility | set-volume', function() {
+module('Unit | Utility | data-helpers', function() {
 
   // TODO: Replace this with your real tests.
   test('it works', function(assert) {
-    let result = setVolume();
+    let result = dataHelpers();
     assert.ok(result);
   });
 });

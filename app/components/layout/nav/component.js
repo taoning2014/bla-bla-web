@@ -6,10 +6,6 @@ export default class LayoutNavComponent extends Component {
   @service authentication;
   @service router;
 
-  get avatar() {
-    return this.authentication.getAvatar();
-  }
-
   get username() {
     return this.authentication.getUsername();
   }

@@ -1,12 +1,15 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-
+import { tracked } from '@glimmer/tracking';
+import {action} from '@ember/object';
 export default class AuthenticationService extends Service {
   @service liveQuery;
+  @tracked currentUser;
 
   constructor() {
     super(...arguments);
     this.User = this.liveQuery.AV.User;
+    this.currentUser = this.User.current();
   }
 
   async signUp(username, password, selectAvatar) {
@@ -17,6 +20,7 @@ export default class AuthenticationService extends Service {
 
     try {
       const userObj = await user.signUp();
+      this.currentUser = user;
       return { status: 'succeed', userObj };
     } catch (e) {
       return { status: 'fail' };
@@ -26,6 +30,7 @@ export default class AuthenticationService extends Service {
   async login(username, password) {
     try {
       const user = await this.User.logIn(username, password);
+      this.currentUser = user;
       return { status: 'succeed', user };
     } catch (error) {
       return { status: 'fail' };
@@ -40,18 +45,38 @@ export default class AuthenticationService extends Service {
     return !!this.User.current();
   }
 
-  getAvatar() {
-    const user = this.User.current();
-    return user.get('avatar');
+  get avatar() {
+    return this.currentUser.get('avatar');
+  }
+
+  get email() {
+    return this.currentUser.get('email');
+  }
+
+  get emailVerified() {
+    return this.currentUser.get('emailVerified');
+  }
+
+  async setAvatar(avatar) {
+    this.currentUser.set('avatar', avatar);
+    await this.currentUser.save();
+  }
+
+  async setEmail(email) {
+    this.currentUser.setEmail(email);
+    await this.currentUser.save();
   }
 
   getUsername() {
-    const user = this.User.current();
-    return user.get('username');
+    return this.currentUser.get('username');
   }
 
   getUserId() {
-    const user = this.User.current();
-    return user.get('objectId');
+    return this.currentUser.get('objectId');
+  }
+
+  @action
+  verifyEmail() {
+    this.User.requestEmailVerify(this.email);
   }
 }

@@ -11,20 +11,20 @@ export default class RoomNoticeService extends Service {
 
   constructor() {
     super(...arguments);
-    this.pollToken = pollTask(this, next => {
+    this.pollToken = pollTask(this, (next) => {
       if (this.noticeList.length !== 0) {
         this.notice = this.noticeList.pop();
-        runTask(this, next, this.notice.dispalyTimeMs || DISPLAY_TIME_IN_MS);
+        runTask(this, next, this.notice.displayTimeMs || DISPLAY_TIME_IN_MS);
       } else {
         this.notice = undefined;
         runTask(this, next, IDLE_POLL_CYCLE);
       }
-    })
+    });
   }
 
   /**
    * @param {Object} message
-   * @param {Number} message.dispalyTimeMs
+   * @param {Number} message.displayTimeMs
    * @param {String} message.type
    * @param {String} message.message
    */

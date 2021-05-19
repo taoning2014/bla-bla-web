@@ -1,0 +1,11 @@
+{{#each this.avatars as |avatar|}}
+  <button
+    type="button"
+    {{on "click" (fn this.chooseAvatar avatar)}}
+  >
+    <Avatar
+      @character={{avatar}}
+      @status={{if (eq this.avatar avatar) "select"}}
+    />
+  </button>
+{{/each}}

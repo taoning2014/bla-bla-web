@@ -2,65 +2,97 @@
   <layout.nav />
   <layout.head />
   <layout.body>
-    <div class="nes-container with-title mb-4">
-      <p class="title">
-        Create a new room
-      </p>
-      <div class="nes-field mb-4">
-        <label for="title">
-          Title
-        </label>
-        <Input
-          type="text"
-          id="title"
-          class="nes-input"
-          maxlength={{40}}
-          @value={{this.title}}
-          placeholder="title"
-        />
-      </div>
-      <div class="nes-field mb-4">
-        {{!-- Comment out, data format is inconsistent with new theme --}}
-        {{!-- <label for="description">
-          (optional) description
-        </label>
-        <Textarea
-          type="text"
-          id="description"
-          class="nes-textarea"
-          maxlength={{140}}
-          @value={{this.description}}
-          placeholder="description"
-        /> --}}
-      </div>
-      {{#if this.isRoomCreateFail}}
-        <p class="nes-text is-error mb-4">
-          Error happened when try to create a room
+    {{#if (eq this.currentState this.state.createRoom)}}
+      <div class="nes-container with-title mb-4">
+        <p class="title">
+          Create a new room
         </p>
-      {{/if}}
-      <div class="display-flex justify-space-between mb-4">
-        <button
-          type="button"
-          class="nes-btn is-primary m-0
-            {{if this.isCreateBtnDisabled " is-disabled"}}"
-          disabled={{this.isCreateBtnDisabled}}
-          {{on "click" this.create}}
-        >
-          Create
-        </button>
+        <div class="nes-field mb-4">
+          <label for="title">
+            Title
+          </label>
+          <Input
+            type="text"
+            id="title"
+            class="nes-input"
+            maxlength={{40}}
+            @value={{this.title}}
+            placeholder="title"
+          />
+        </div>
+        <div class="nes-field mb-4">
+          <label for="description">
+            (optional) description
+          </label>
+          <Textarea
+            type="text"
+            id="description"
+            class="nes-textarea"
+            maxlength={{140}}
+            @value={{this.description}}
+            placeholder="description"
+          />
+        </div>
+        <div class="nes-field mb-4">
+          <label>
+            <Input
+              @type="checkbox"
+              class="nes-checkbox ml-2"
+              @checked={{this.isScheduledRoom}}
+            />
+            <span>Is Scheduled Room?</span>
+          </label>
+          {{#if this.isScheduledRoom}}
+            <EmberFlatpickr
+              placeholder="Choose a Date and time"
+              @allowInput={{false}}
+              @date={{this.scheduledTime}}
+              @enableTime={{true}}
+              @hourIncrement={{1}}
+              @maxDate={{this.scheduledTo}}
+              @minDate={{this.scheduledFrom}}
+              @minuteIncrement={{30}}
+              @onChange={{this.updateDate}}
+            />
+          {{/if}}
+        </div>
         {{#if this.isRoomCreateFail}}
+          <p class="nes-text is-error mb-4">
+            Error happened when try to create a room
+          </p>
+        {{/if}}
+        <div class="display-flex justify-space-between mb-4">
           <button
             type="button"
-            class="nes-btn is-warning m-0"
-            {{on "click" this.reset}}
+            class="nes-btn is-primary m-0
+              {{if this.isCreateBtnDisabled " is-disabled"}}"
+            disabled={{this.isCreateBtnDisabled}}
+            {{on "click" this.create}}
           >
-            Try again
+            Create
           </button>
-        {{/if}}
+          {{#if this.isRoomCreateFail}}
+            <button
+              type="button"
+              class="nes-btn is-warning m-0"
+              {{on "click" this.reset}}
+            >
+              Try again
+            </button>
+          {{/if}}
+        </div>
       </div>
-    </div>
-    {{#if this.isRoomCreateSucceed}}
-      <Share @roomId={{this.roomId}} />
+      {{#if this.isRoomCreateSucceed}}
+        <Share @roomId={{this.roomId}} />
+      {{/if}}
+    {{else if (eq this.currentState this.state.verifyEmail)}}
+      <div class="nes-container with-title mb-4">
+        <p class="nes-text is-error title">
+          Oops, Don't have access to create a room yet
+        </p>
+        <p>Please verify your email before you can create a room</p>
+        <p>You can verify email on in the setting tab</p>
+      </div>
     {{/if}}
   </layout.body>
 </Layout>

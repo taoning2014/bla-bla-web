@@ -16,10 +16,13 @@ export default class AuthenticationAdminController extends Controller {
   @service liveQuery;
 
   @tracked currentState = this.state.admin;
-  @tracked generatedInviteCode;
+
+  @tracked generatedInviteCodes = [];
+
   @tracked inviteCodeInput; // Notice: get value from <Input /> which is a string
   @tracked inviteCodeInputError;
   @tracked inviteCode = new TrackedArray([]);
+  @service roomNotice;
 
   get isGenerateBtnDisabled() {
     return this.inviteCodeInputError || !this.inviteCodeInput;
@@ -28,15 +31,19 @@ export default class AuthenticationAdminController extends Controller {
   constructor() {
     super(...arguments);
 
-    new this.liveQuery.AV.Query('InviteCode')
-      .equalTo('isVested', false)
-      .find()
-      .then((codes) => {
-        this.generatedInviteCode = codes.map((code) => ({
-          inviteCode: code.get('inviteCode'),
-          isVested: code.get('isVested'),
-        }));
-      });
+    new this.liveQuery.AV.Query('InviteCode').find().then((codes) => {
+      this.generatedInviteCodes = codes.map((code) => ({
+        inviteCode: code.get('inviteCode'),
+        isVested: code.get('isVested'),
+      }));
+    });
+  }
+
+  get unredeemedInviteCodes() {
+    return this.generatedInviteCodes.filterBy('isVested', false);
+  }
+  get redeemedInviteCodes() {
+    return this.generatedInviteCodes.filterBy('isVested');
   }
 
   reset() {
@@ -73,5 +80,16 @@ export default class AuthenticationAdminController extends Controller {
     } catch (e) {
       this.currentState = this.state.error;
     }
+  }
+
+  @action
+  copyCode(inviteCode) {
+    document.querySelector(`#code-${inviteCode}`).select();
+    document.execCommand('copy');
+    this.roomNotice.push({
+      displayTimeMs: 5000,
+      type: 'is-primary',
+      message: `Copied!`,
+    });
   }
 }

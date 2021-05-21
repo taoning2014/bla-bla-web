@@ -1,9 +1,9 @@
 {{outlet}}<Layout as |layout|>
   <layout.nav />
-  <layout.head />
+  <layout.head @roomNotice={{this.roomNotice}}/>
   <layout.body>
     {{#if (eq this.currentState this.state.admin)}}
-      <div class="nes-container with-title mb-4">
+      <div class="nes-container with-title mv-4">
         <p class="title">
           Generate invite code
         </p>
@@ -45,13 +45,28 @@
           </button>
         </div>
       </div>
-      <div class="nes-container with-title">
+
+      <div class="nes-container with-title mv-4">
         <p class="title">List of generated invite code</p>
         <div class="lists">
           <ul class="nes-list is-disc">
-            {{#each this.generatedInviteCode as |code|}}
+            {{#each this.unredeemedInviteCodes as |code|}}
               <li>
-                code: {{code.inviteCode}} | isVested: <span class="nes-text {{unless code.isVested " is-success"}}">{{code.isVested}}</span>
+                code: <input type="text" id="code-{{code.inviteCode}}" value={{code.inviteCode}} />
+                <button {{on "click" (fn this.copyCode code.inviteCode)}}>Copy📋</button>
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+
+      <div class="nes-container with-title mv-4">
+        <p class="title">Already redeemed</p>
+        <div class="lists">
+          <ul class="nes-list is-disc">
+            {{#each this.redeemedInviteCodes as |code|}}
+              <li>
+                {{code.inviteCode}}
               </li>
             {{/each}}
           </ul>

@@ -21,10 +21,14 @@
     </p>
   </div>
   <div class="display-flex">
-    {{#if (has-block)}}
-      {{yield}}
-    {{else}}
-      <i class="nao-nao animate"></i>
+    {{yield}}
+    {{#if @roomNotice.notice}}
+      <p class="nes-balloon align-self-flex-start">
+        <span
+          class="nes-text {{@roomNotice.notice.type}}"
+        >{{@roomNotice.notice.message}}</span>
+      </p>
     {{/if}}
+    <i class="nao-nao animate"></i>
   </div>
 </div>

@@ -3,17 +3,11 @@
   <layout.head
     @title={{this.model.title}}
     @description={{this.model.description.description}}
-  >
-    {{#if this.roomNotice.notice}}
-      <p class="nes-balloon align-self-flex-start">
-        <span
-          class="nes-text {{this.roomNotice.notice.type}}"
-        >{{this.roomNotice.notice.message}}</span>
-      </p>
-    {{/if}}
-    <i class="nao-nao {{if this.roomNotice.notice " mt-6 animate"}}"></i>
-  </layout.head>
+
+    @roomNotice={{this.roomNotice}}
+  />
   <layout.body class="pb-6">
+
     {{#if (eq this.currentState this.state.LOADING)}}
       <div class="nes-container with-title mb-4">
         <p class="title">

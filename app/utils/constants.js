@@ -2,6 +2,8 @@ export const ONE_MIN = 60 * 1000;
 export const ONE_HOUR = 60 * ONE_MIN;
 export const ONE_DAY = 24 * ONE_HOUR;
 
+export const INVITATION_CODE_LENGTH = 10;
+
 export const AGORA_NETWORK_QUALITY_MAP = {
   0: 'Unknown',
   1: 'Excellent',

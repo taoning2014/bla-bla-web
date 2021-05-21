@@ -1,0 +1,74 @@
+{{outlet}}<Layout as |layout|>
+  <layout.nav />
+  <layout.head />
+  <layout.body>
+    {{#if (eq this.currentState this.state.admin)}}
+      <div class="nes-container with-title mb-4">
+        <p class="title">
+          Generate invite code
+        </p>
+        <div class="nes-field mb-4">
+          <label for="number-of-invite-code">
+            Number of invites to generate
+          </label>
+          <Input
+            @type="number"
+            id="number-of-invite-code"
+            class="nes-input"
+            @value={{this.inviteCodeInput}}
+            @key-up={{this.checkInput}}
+            placeholder="enter the number between 1 to 100"
+          />
+          {{#if this.inviteCodeInputError}}
+            <p class="nes-text is-error">Incorrect input, please enter number
+              between 1 and 100</p>
+          {{/if}}
+        </div>
+        {{#if this.inviteCode}}
+          <div class="lists">
+            <ul class="nes-list is-disc">
+              {{#each this.inviteCode as |inviteCode|}}
+                <li>{{inviteCode}}</li>
+              {{/each}}
+            </ul>
+          </div>
+        {{/if}}
+        <div class="display-flex justify-space-between">
+          <button
+            type="button"
+            class="nes-btn is-success m-0
+              {{if this.isGenerateBtnDisabled " is-disabled"}}"
+            disabled={{this.isGenerateBtnDisabled}}
+            {{on "click" this.createInviteCode}}
+          >
+            Generate invite code
+          </button>
+        </div>
+      </div>
+      <div class="nes-container with-title">
+        <p class="title">List of generated invite code</p>
+        <div class="lists">
+          <ul class="nes-list is-disc">
+            {{#each this.generatedInviteCode as |code|}}
+              <li>
+                code: {{code.inviteCode}} | isVested: <span class="nes-text {{unless code.isVested " is-success"}}">{{code.isVested}}</span>
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    {{else if (eq this.currentState this.state.error)}}
+      <div class="nes-container with-title">
+        <p class="title">
+          Leancloud error
+        </p>
+        <p class="nes-text is-error">
+          Could not create new invitation code
+        </p>
+        <LinkTo @route="authentication.home" class="nes-btn is-primary">
+          Back to home
+        </LinkTo>
+      </div>
+    {{/if}}
+  </layout.body>
+</Layout>

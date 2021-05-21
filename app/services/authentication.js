@@ -57,6 +57,10 @@ export default class AuthenticationService extends Service {
     return this.currentUser.get('emailVerified');
   }
 
+  get isAdmin() {
+    return this.currentUser.get('role') === 'admin';
+  }
+
   async setAvatar(avatar) {
     this.currentUser.set('avatar', avatar);
     await this.currentUser.save();

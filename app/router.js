@@ -11,6 +11,7 @@ Router.map(function () {
   this.route('register');
 
   this.route('authentication', { path: '/' }, function () {
+    this.route('admin');
     this.route('home', { path: '/' });
     this.route('room', { path: '/room/:room_id' });
     this.route('create-room');

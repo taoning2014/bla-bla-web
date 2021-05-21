@@ -59,6 +59,18 @@
             @key-up={{this.passwordKeyUp}}
           />
         </div>
+        <div class="nes-field mb-4">
+          <label for="invitation-code">
+            Invitation code
+          </label>
+          <Input
+            type="text"
+            id="invitation-code"
+            class="nes-input"
+            placeholder="invitation code"
+            @value={{this.inviteCode}}
+          />
+        </div>
         <div class="display-flex justify-space-between">
           <button
             type="button"
@@ -90,6 +102,22 @@
           {{on "click" this.reset}}
         >
           Try different name
+        </button>
+      </div>
+    {{else if (eq this.currentState this.state.invalidInviteCode)}}
+      <div class="nes-container with-title">
+        <p class="title">
+          Invalid Invite Code
+        </p>
+        <p class="nes-text is-error">
+          Sorry, the Invite Code is invalid. Please get a new one. You can reach out to us at tningjs@outlook.com to get a valid code
+        </p>
+        <button
+          type="button"
+          class="nes-btn is-primary"
+          {{on "click" this.reset}}
+        >
+          Try again
         </button>
       </div>
     {{/if}}

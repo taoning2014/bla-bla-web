@@ -8,6 +8,11 @@
   </div>
   <div class="display-flex flex-wrap">
     {{yield}}
+    {{#if this.authentication.isAdmin}}
+      <LinkTo @route="authentication.admin" class="nes-btn is-warning mr-4">
+        Admin
+      </LinkTo>
+    {{/if}}
     <a
       href="https://www.wenjuan.com/s/UZBZJv3abt/?sr=wenjuan_mini_app&sy=2"
       target="_blank"

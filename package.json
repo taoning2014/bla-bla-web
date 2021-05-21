@@ -69,7 +69,8 @@
   },
   "dependencies": {
     "agora-rtc-sdk-ng": "^4.4.0",
-    "leancloud-storage": "^4.10.1"
+    "leancloud-storage": "^4.10.1",
+    "voucher-code-generator": "^1.1.1"
   },
   "config": {
     "commitizen": {

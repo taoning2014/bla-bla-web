@@ -92,6 +92,14 @@
         </p>
         <p>Please verify your email before you can create a room</p>
         <p>You can verify email on in the setting tab</p>
+
+        <div class="display-flex">
+          <LinkTo @route="authentication.settings">
+            <span class="nes-btn is-success">
+              Verify email
+            </span>
+          </LinkTo>
+        </div>
       </div>
     {{/if}}
   </layout.body>

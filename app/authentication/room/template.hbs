@@ -13,8 +13,7 @@
     {{/if}}
     <i class="nao-nao {{if this.roomNotice.notice " mt-6 animate"}}"></i>
   </layout.head>
-  <layout.body @twoColumnsLayout={{true}}>
-
+  <layout.body class="pb-6">
     {{#if (eq this.currentState this.state.LOADING)}}
       <div class="nes-container with-title mb-4">
         <p class="title">

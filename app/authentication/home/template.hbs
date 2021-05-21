@@ -2,14 +2,12 @@
   <layout.nav>
     <button
       type="button"
-      class="nes-btn is-success"
+      class="nes-btn is-primary mr-4"
       {{on "click" (set this "isShowReleaseModal" true)}}
-    >
-      🎁
-    </button>
+    >💡</button>
   </layout.nav>
   <layout.head />
-  <layout.body class='mb-room'>
+  <layout.body class="mb-room">
     {{#each this.model.rooms as |room|}}
       <Room @room={{room}} />
     {{/each}}
@@ -25,24 +23,25 @@
         Our app has a new release for you today!
       </p>
       <p>
-        Here is what have been updated:
+        Here is what has been updated:
       </p>
       <div class="lists">
         <ul class="nes-list is-circle">
           <li>
-            聊天室里边的小猫可以讲更多的话啦😃
+            Feed now lists current active rooms and scheduled rooms.
           </li>
           <li>
-            新功能展示（就是现在展现在你前面的页面）🔔
+            Users can update their avatar and verify email on the setting page.
           </li>
           <li>
-            网站优化，加载速度更快啦⚡️
+            Invitation code, the new user will need to enter an invitation code.
           </li>
         </ul>
       </div>
       <div class="mb-4">
         <p class="nes-text is-error">
-          Thank you and love from everyone at bla-bla team
+          Thank you, Sean Johnson, for adding tons of useful features with us.
+          Sean, you are our superhero.<i class="nes-icon heart"></i>
         </p>
         <i class="nes-mario"></i>
         <i class="nes-ash"></i>
@@ -57,5 +56,6 @@
         Try it out
       </button>
     </div>
+    <span class="mb-app-version">Version: {{app-version versionOnly=true}} Beta</span>
   </ModalDialog>
 {{/if}}

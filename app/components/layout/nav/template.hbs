@@ -7,33 +7,33 @@
     </LinkTo>
   </div>
   <div class="display-flex flex-wrap">
-    {{yield}}
     {{#if this.authentication.isAdmin}}
       <LinkTo @route="authentication.admin" class="nes-btn is-warning mr-4">
         Admin
       </LinkTo>
     {{/if}}
+    <LinkTo @route="authentication.home" class="nes-btn is-warning mr-4">
+      Home
+    </LinkTo>
+    <LinkTo @route="authentication.create-room">
+      <span class="nes-btn is-warning mr-4">
+        Create a room
+      </span>
+    </LinkTo>
+    {{yield}}
     <a
       href="https://www.wenjuan.com/s/UZBZJv3abt/?sr=wenjuan_mini_app&sy=2"
       target="_blank"
       rel="noopener noreferrer"
-      class="nes-btn is-error mr-4"
+      class="nes-btn is-primary mr-4"
     >
-      <i class="nes-icon is-small trophy"></i>
+      📝
     </a>
-    <LinkTo @route="authentication.home" class="nes-btn is-warning mr-4">
-      Home
-    </LinkTo>
-    <LinkTo @route="authentication.settings" class="nes-btn is-warning mr-4">
-      Setting
-    </LinkTo>
-    <LinkTo @route="authentication.create-room">
-      <span class="nes-btn is-primary mr-4">
-        Create room
-      </span>
+    <LinkTo @route="authentication.settings" class="nes-btn is-primary mr-4">
+      ⚙️
     </LinkTo>
     <button type="button" class="nes-btn is-primary" {{on "click" this.logout}}>
-      Logout
+      🚪
     </button>
   </div>
 </div>

@@ -18,12 +18,19 @@ export default class LiveQueryService extends Service {
     this.AV = AV;
 
     // Record classes
+    this.Room = this.AV.Object.extend('Room');
     this.RoomUser = this.AV.Object.extend('RoomUser');
   }
 
-  async createRoomUser(
-    { roomId, userId, username, avatar, role, state, isSelf } = {}
-  ) {
+  async createRoomUser({
+    roomId,
+    userId,
+    username,
+    avatar,
+    role,
+    state,
+    isSelf,
+  } = {}) {
     const roomUser = new this.RoomUser();
     roomUser.set('roomId', roomId);
     roomUser.set('userId', userId);
@@ -35,5 +42,25 @@ export default class LiveQueryService extends Service {
     const roomUserObj = await roomUser.save();
 
     return roomUserObj;
+  }
+
+  async createRoom({
+    adminUser,
+    adminUserAvatar,
+    adminUsername,
+    description,
+    scheduledTime,
+    title,
+  }) {
+    const room = new this.Room();
+    room.set('adminUser', adminUser);
+    room.set('adminUserAvatar', adminUserAvatar);
+    room.set('adminUsername', adminUsername);
+    room.set('description', description);
+    room.set('scheduledTime', scheduledTime);
+    room.set('title', title);
+    const roomObj = await room.save();
+
+    return roomObj;
   }
 }

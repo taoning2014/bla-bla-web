@@ -15,8 +15,11 @@ export default class AuthenticationHomeRoute extends Route {
     const twoHoursAgo = new Date(Date.now() - 2 * ONE_HOUR);
     /**
      * For regular room, get the ones that are created within the past two hours
-     * Todo: run scheduled tasks using cloudfunction to destroy rooms that created two hours ago
-     * Refer: https://docs.leancloud.app/leanengine_cloudfunction_guide-node.html#hash-108242322
+     * ~Todo: run scheduled tasks using cloudfunction to destroy rooms that created two hours ago~
+     * ~Refer: https://docs.leancloud.app/leanengine_cloudfunction_guide-node.html#hash-108242322~
+     *
+     * Update: we should NOT destroy rooms, instead, we can leverage it for tracking.
+     * Here is a [WIP Tracking RFC](https://github.com/taoning2014/metal-bat-web/issues/28)
      */
     const roomQuery = new this.liveQuery.AV.Query('Room').greaterThanOrEqualTo(
       'createdAt',

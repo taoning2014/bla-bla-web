@@ -38,19 +38,18 @@ export default class AuthenticationCreateRoomController extends Controller {
   @action
   async create() {
     const userId = this.authentication.getUserId();
-    const room = new this.liveQuery.AV.Object('Room');
-    room.set('title', this.title);
-    room.set('description', { description: this.description });
-    room.set('adminUser', userId);
-    room.set('adminUsername', this.authentication.getUsername());
-    room.set('adminUserAvatar', this.authentication.avatar);
-
-    if (this.isScheduledRoom) {
-      room.set('scheduledTime', this.scheduledTime);
-    }
 
     try {
-      const roomObj = await room.save();
+      const roomObj = await this.liveQuery.createRoom({
+        adminUser: userId,
+        adminUserAvatar: this.authentication.avatar,
+        adminUsername: this.authentication.getUsername(),
+        description: { description: this.description },
+        scheduledTime: this.isScheduledRoom
+          ? this.scheduledTime.getTime()
+          : undefined,
+        title: this.title,
+      });
       this.roomId = roomObj.id;
     } catch (e) {
       this.isRoomCreateFail = true;
@@ -72,6 +71,6 @@ export default class AuthenticationCreateRoomController extends Controller {
     this.isRoomCreateFail = false;
     this.isRoomCreateSucceed = false;
     this.isScheduledRoom = false;
-    this.scheduledTime = undefined;
+    this.scheduledTime = this.scheduledFrom;
   }
 }

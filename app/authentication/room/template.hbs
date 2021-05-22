@@ -3,9 +3,9 @@
   <layout.head
     @title={{this.model.title}}
     @description={{this.model.description.description}}
+    @roomNotice={{this.roomNotice}}
   />
   <layout.body class="pb-6">
-
     {{#if (eq this.currentState this.state.LOADING)}}
       <div class="nes-container with-title mb-4">
         <p class="title">
@@ -180,7 +180,11 @@
               }}
             </button>
           {{/if}}
-          {{#if (eq this.me.role this.userRole.ADMIN)}}
+          {{#if
+            (or
+              (eq this.me.role this.userRole.ADMIN) this.authentication.isAdmin
+            )
+          }}
             <button
               type="button"
               class="nes-btn is-primary {{if this.me.isSaving " is-disabled"}}"
@@ -263,6 +267,5 @@
       {{/if}}
       <Share @roomId={{this.roomId}} @hideGoToRoom={{true}} />
     {{/if}}
-
   </layout.body>
 </Layout>

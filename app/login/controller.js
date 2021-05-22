@@ -14,6 +14,7 @@ export default class LoginController extends Controller {
   @service router;
 
   @tracked currentState = this.state.login;
+  @tracked errorMessage;
   @tracked username;
   @tracked password;
 
@@ -36,11 +37,13 @@ export default class LoginController extends Controller {
       }
     } else if (result.status === 'fail') {
       this.currentState = this.state.error;
+      this.errorMessage = result.message;
     }
   }
 
   @action
   reset() {
+    this.errorMessage = '';
     this.username = '';
     this.password = '';
     this.currentState = this.state.login

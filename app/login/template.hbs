@@ -37,7 +37,7 @@
           Login error
         </p>
         <p class="nes-text is-error">
-          wrong password..
+          {{this.errorMessage}}
         </p>
         <button type="button" class="nes-btn is-primary" {{on 'click' this.reset}}>Try again</button>
       </div>

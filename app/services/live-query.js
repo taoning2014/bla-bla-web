@@ -10,6 +10,11 @@ export default class LiveQueryService extends Service {
       masterKey: ENV.LEANCLOUD_ENV.APP_MASTER_KEY,
     });
 
+    // Turn on debug to output details of every request made by the SDK to the browser console
+    if (ENV.environment === 'development') {
+      AV.debug.enable();
+    }
+
     this.AV = AV;
 
     // Record classes

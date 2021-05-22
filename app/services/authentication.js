@@ -1,15 +1,29 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import {action} from '@ember/object';
+import { action } from '@ember/object';
+
 export default class AuthenticationService extends Service {
   @service liveQuery;
+  @service router;
   @tracked currentUser;
 
   constructor() {
     super(...arguments);
     this.User = this.liveQuery.AV.User;
     this.currentUser = this.User.current();
+
+    /**
+     * Because this.User.current() is cached on the client, it can not prove that the user still exsits. The following
+     * code check whether the user still exist. In the case we delete a malicious user account from leancloud, the
+     * `catch()` block will logout them.
+     */
+    this.currentUser
+      ?.fetch()
+      .catch(() => {
+        this.logOut();
+        this.router.transitionTo('login');
+      });
   }
 
   async signUp(username, password, selectAvatar) {
@@ -33,7 +47,7 @@ export default class AuthenticationService extends Service {
       this.currentUser = user;
       return { status: 'succeed', user };
     } catch (error) {
-      return { status: 'fail' };
+      return { status: 'fail', message: error.rawMessage };
     }
   }
 

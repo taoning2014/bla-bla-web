@@ -11,11 +11,28 @@ export default class AuthenticationHomeRoute extends Route {
     const isShowReleaseModal = await this.genos.showFeature(
       FEATURE_LIST.SHOW_RELEASE_MODAL
     );
+
     const twoHoursAgo = new Date(Date.now() - 2 * ONE_HOUR);
-    const rooms = await new this.liveQuery.AV.Query('Room')
-      .greaterThanOrEqualTo('createdAt', twoHoursAgo)
-      .descending('scheduledTime')
-      .descending('createdAt')
+    /**
+     * For regular room, get the ones that are created within the past two hours
+     * Todo: run scheduled tasks using cloudfunction to destroy rooms that created two hours ago
+     * Refer: https://docs.leancloud.app/leanengine_cloudfunction_guide-node.html#hash-108242322
+     */
+    const roomQuery = new this.liveQuery.AV.Query('Room').greaterThanOrEqualTo(
+      'createdAt',
+      twoHoursAgo
+    );
+    // For scheduled room, get the ones that scheduled time are within past two hours window
+    const scheduledRoomQuery = new this.liveQuery.AV.Query(
+      'Room'
+    ).greaterThanOrEqualTo('scheduledTime', Date.now() - 2 * ONE_HOUR);
+
+    const rooms = await this.liveQuery.AV.Query.or(
+      roomQuery,
+      scheduledRoomQuery
+    )
+      .addDescending('scheduledTime')
+      .addDescending('createdAt')
       .find();
 
     return {

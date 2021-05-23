@@ -104,6 +104,12 @@
         </div>
       </div>
     {{else if (eq this.currentState this.state.LOADED)}}
+      {{#if this.isShowPoorNetworkQuality}}
+        <p class="nes-text is-error">
+          Poor network connection
+          <span class="spinner"></span>
+        </p>
+      {{/if}}
       <div class="nes-container with-title mb-4">
         <p class="title">
           Host
@@ -135,31 +141,38 @@
         <p class="title">
           Audience
         </p>
-        <div>
-          {{#each this.guests as |guest|}}
-            <Avatar
-              @character={{guest.avatar}}
-              @username={{guest.username}}
-              @state={{guest.state}}
-            >
-              <div class="display-flex flex-column align-items-center">
-                {{#if guest.reaction}}
-                  <i class="avatar-reaction {{guest.reaction}}"></i>
-                {{/if}}
-                {{#if this.canHostAGuest}}
-                  <button
-                    class="mt-1 {{if this.me.isSaving " is-disabled"}}"
-                    disabled={{this.me.isSaving}}
-                    type="button"
-                    {{on "click" (fn this.toggleHost guest.userId)}}
-                  >
-                    Host
-                  </button>
-                {{/if}}
-              </div>
-            </Avatar>
-          {{/each}}
-        </div>
+        {{#if (and this.isHost (not this.me.isShowAudienceDetails))}}
+          <p class="nes-text is-primary">
+            Number of Audience in the room:
+            {{this.guests.length}}
+          </p>
+        {{else}}
+          <div>
+            {{#each this.guests as |guest|}}
+              <Avatar
+                @character={{guest.avatar}}
+                @username={{guest.username}}
+                @state={{guest.state}}
+              >
+                <div class="display-flex flex-column align-items-center">
+                  {{#if guest.reaction}}
+                    <i class="avatar-reaction {{guest.reaction}}"></i>
+                  {{/if}}
+                  {{#if this.canHostAGuest}}
+                    <button
+                      class="mt-1 {{if this.me.isSaving " is-disabled"}}"
+                      disabled={{this.me.isSaving}}
+                      type="button"
+                      {{on "click" (fn this.toggleHost guest.userId)}}
+                    >
+                      Host
+                    </button>
+                  {{/if}}
+                </div>
+              </Avatar>
+            {{/each}}
+          </div>
+        {{/if}}
       </div>
       <div class="nes-container with-title mb-4">
         <p class="title">
@@ -225,7 +238,7 @@
               (set this "me.showStats" (if this.me.showStats false true))
             }}
           >
-            {{if this.me.showStats "Hide" "Stats"}}
+            📶
           </button>
           {{#if this.isGuest}}
             <button
@@ -241,6 +254,22 @@
               }}
             >
               React
+            </button>
+          {{/if}}
+          {{#if this.isHost}}
+            <button
+              type="button"
+              class="nes-btn is-primary"
+              {{on
+                "click"
+                (set
+                  this
+                  "me.isShowAudienceDetails"
+                  (if this.me.isShowAudienceDetails false true)
+                )
+              }}
+            >
+              {{if this.me.isShowAudienceDetails "🔒" "🔓"}}
             </button>
           {{/if}}
         </div>

@@ -22,11 +22,11 @@
   </div>
   <div class="display-flex">
     {{yield}}
-    {{#if @roomNotice.notice}}
+    {{#if this.roomNotice.notice}}
       <p class="nes-balloon align-self-flex-start">
         <span
-          class="nes-text {{@roomNotice.notice.type}}"
-        >{{@roomNotice.notice.message}}</span>
+          class="nes-text {{this.roomNotice.notice.type}}"
+        >{{this.roomNotice.notice.message}}</span>
       </p>
     {{/if}}
     <i class="nao-nao animate"></i>

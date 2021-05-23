@@ -23,6 +23,7 @@ export default class AuthenticationRoomController extends Controller {
 
   @tracked currentState;
   @tracked openReactionsMenu = false;
+  @tracked isShowPoorNetworkQuality;
 
   @tracked roomUsers = new TrackedMap(); // <string UserId, TrackedObject RoomUser>
 
@@ -64,6 +65,11 @@ export default class AuthenticationRoomController extends Controller {
   get isAdmin() {
     return this.me.role === USER_ROLE.ADMIN;
   }
+
+  get isHost() {
+    return this.me.role === USER_ROLE.ADMIN || this.me.role === USER_ROLE.HOST;
+  }
+
   get isGuest() {
     return this.me.role === USER_ROLE.GUEST;
   }
@@ -174,10 +180,20 @@ export default class AuthenticationRoomController extends Controller {
         if (!this.me) {
           return;
         }
+        const { downlinkNetworkQuality, uplinkNetworkQuality} = stats;
+
+        if (downlinkNetworkQuality >= 3 || uplinkNetworkQuality >= 3) {
+          this.isShowPoorNetworkQuality = true;
+        } else {
+          this.isShowPoorNetworkQuality = false;
+        }
+
         this.me.downlinkNetworkQuality =
-          AGORA_NETWORK_QUALITY_MAP[stats.downlinkNetworkQuality];
+          AGORA_NETWORK_QUALITY_MAP[downlinkNetworkQuality];
         this.me.uplinkNetworkQuality =
-          AGORA_NETWORK_QUALITY_MAP[stats.uplinkNetworkQuality];
+          AGORA_NETWORK_QUALITY_MAP[uplinkNetworkQuality];
+
+
       },
 
       'volume-indicator': (volumes) => {

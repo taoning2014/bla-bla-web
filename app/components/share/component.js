@@ -20,7 +20,7 @@ export default class ShareComponent extends Component {
     });
     const { state } = result;
 
-    if (state == 'granted' || state == 'prompt') {
+    if (state === 'granted' || state === 'prompt') {
       navigator.clipboard.writeText(this.shareText);
       this.isCopyLinkSucceed = true;
     } else {

@@ -8,6 +8,7 @@ const DEFAULT_DESCRIPTION = 'Welcome Friends';
 export default class LayoutHeadComponent extends Component {
   @service authentication;
   @service router;
+  @service roomNotice;
 
   get avatar() {
     return this.authentication.avatar;
@@ -18,11 +19,11 @@ export default class LayoutHeadComponent extends Component {
   }
 
   get title() {
-    return this.args.title || DEFAULT_TITLE;
+    return this.args.title ?? DEFAULT_TITLE;
   }
 
   get description() {
-    return this.args.description || DEFAULT_DESCRIPTION;
+    return this.args.description ?? DEFAULT_DESCRIPTION;
   }
 
   @action

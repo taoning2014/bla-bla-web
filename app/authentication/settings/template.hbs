@@ -43,11 +43,11 @@
             email
           </label>
           <Input
-            type="email"
-            id="user-email"
-            class="nes-input"
+            @type="email"
+            @id="user-email"
             @value={{this.email}}
             @key-up={{set this "isSaved" false}}
+            class="nes-input"
             placeholder="email"
           />
         </div>

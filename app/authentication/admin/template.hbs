@@ -13,10 +13,10 @@
           </label>
           <Input
             @type="number"
-            id="number-of-invite-code"
-            class="nes-input"
+            @id="number-of-invite-code"
             @value={{this.inviteCodeInput}}
             @key-up={{this.checkInput}}
+            class="nes-input"
             placeholder="enter the number between 1 to 100"
           />
           {{#if this.inviteCodeInputError}}

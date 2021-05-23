@@ -20,6 +20,8 @@ export default class RegisterController extends Controller {
   @tracked username;
   @tracked password;
   @tracked retypePassword;
+  @tracked email;
+  @tracked errorMessage;
   @tracked isEnteredSamePassword;
   @tracked inviteCode = '';
   @tracked usernameExceedLimit;
@@ -30,6 +32,7 @@ export default class RegisterController extends Controller {
       !!this.username &&
       !!this.password &&
       !!this.retypePassword &&
+      !!this.email &&
       !this.usernameExceedLimit &&
       this.isEnteredSamePassword &&
       this.inviteCode.length === INVITATION_CODE_LENGTH;
@@ -38,8 +41,9 @@ export default class RegisterController extends Controller {
 
   @action
   async signUp() {
+    let inviteCode;
     try {
-      const [inviteCode] = await new this.liveQuery.AV.Query('InviteCode')
+      [inviteCode] = await new this.liveQuery.AV.Query('InviteCode')
         .equalTo('inviteCode', this.inviteCode)
         .find();
       if (!inviteCode || inviteCode.get('isVested')) {
@@ -57,17 +61,24 @@ export default class RegisterController extends Controller {
     const result = await this.authentication.signUp(
       this.username,
       this.password,
-      this.selectAvatar
+      this.selectAvatar,
+      this.email
     );
     if (result.status === 'succeed') {
       this.router.transitionTo('authentication.home');
     } else if (result.status === 'fail') {
+      // reset inviteCode if register is not successful
+      inviteCode.set('isVested', false);
+      inviteCode.save();
+
       this.currentState = this.state.error;
+      this.errorMessage = result.message;
     }
   }
 
   @action
   reset() {
+    this.errorMessage = '';
     this.username = '';
     this.password = '';
     this.retypePassword = '';
@@ -86,10 +97,5 @@ export default class RegisterController extends Controller {
   @action
   passwordKeyUp() {
     this.isEnteredSamePassword = this.password === this.retypePassword;
-  }
-
-  @action
-  chooseAvatar(avatar) {
-    this.selectAvatar = avatar;
   }
 }

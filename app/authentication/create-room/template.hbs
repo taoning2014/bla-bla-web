@@ -12,11 +12,11 @@
             Title
           </label>
           <Input
-            type="text"
-            id="title"
+            @type="text"
+            @id="title"
+            @value={{this.title}}
             class="nes-input"
             maxlength={{40}}
-            @value={{this.title}}
             placeholder="title"
           />
         </div>
@@ -37,8 +37,8 @@
           <label>
             <Input
               @type="checkbox"
-              class="nes-checkbox ml-2"
               @checked={{this.isScheduledRoom}}
+              class="nes-checkbox ml-2"
             />
             <span>Is Scheduled Room?</span>
           </label>

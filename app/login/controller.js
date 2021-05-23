@@ -14,13 +14,32 @@ export default class LoginController extends Controller {
   @service router;
 
   @tracked currentState = this.state.login;
+  @tracked email;
   @tracked errorMessage;
   @tracked username;
   @tracked password;
+  @tracked isResetPasswordSucceed
+  @tracked isShowResetPassword;
 
   get isLoginBtnDisabled() {
     const isLoginBtnEnabled = !!this.username && !!this.password;
     return !isLoginBtnEnabled;
+  }
+
+  get isResetEmailBtnDisabled() {
+    return !this.email.length;
+  }
+
+  @action
+  async resetPassword() {
+    const result = await this.authentication.resetPassword(this.email);
+    if (result.status === 'succeed') {
+      this.isShowResetPassword = false;
+      this.isResetPasswordSucceed = true;
+    } else {
+      this.currentState = this.state.error;
+      this.errorMessage = result.message;
+    }
   }
 
   @action
@@ -44,6 +63,8 @@ export default class LoginController extends Controller {
   @action
   reset() {
     this.errorMessage = '';
+    this.email = '';
+    this.isShowResetPassword = false;
     this.username = '';
     this.password = '';
     this.currentState = this.state.login

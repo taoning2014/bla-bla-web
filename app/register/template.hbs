@@ -12,7 +12,10 @@
           <div
             class="display-flex justify-space-between align-items-flex-start flex-wrap"
           >
-            <AvatarSelector @chooseAvatar={{this.chooseAvatar}} />
+            <AvatarSelector
+              @chooseAvatar={{set this "chooseAvatar"}}
+              @currentAvatar={{this.selectAvatar}}
+            />
           </div>
         </div>
         <div class="nes-field mb-4">
@@ -20,12 +23,12 @@
             Username
           </label>
           <Input
-            type="text"
-            id="user-name"
-            class="nes-input"
-            placeholder="username"
+            @type="text"
+            @id="user-name"
             @value={{this.username}}
             @key-up={{this.usernameKeyUp}}
+            class="nes-input"
+            placeholder="username"
           />
           {{#if this.usernameExceedLimit}}
             <p class="nes-text is-error">
@@ -38,11 +41,11 @@
             Password
           </label>
           <Input
-            type="password"
-            id="password"
-            class="nes-input"
+            @type="password"
+            @id="password"
             @value={{this.password}}
             @key-up={{this.passwordKeyUp}}
+            class="nes-input"
             placeholder="password"
           />
         </div>
@@ -51,12 +54,24 @@
             Retype password
           </label>
           <Input
-            type="password"
-            id="retype-password"
-            class="nes-input"
-            placeholder="retype password"
+            @type="password"
+            @id="retype-password"
             @value={{this.retypePassword}}
             @key-up={{this.passwordKeyUp}}
+            class="nes-input"
+            placeholder="retype password"
+          />
+        </div>
+        <div class="nes-field mb-4">
+          <label for="user-email">
+            Email
+          </label>
+          <Input
+            @type="email"
+            @id="user-email"
+            @value={{this.email}}
+            class="nes-input"
+            placeholder="email"
           />
         </div>
         <div class="nes-field mb-4">
@@ -64,13 +79,15 @@
             Invitation code
           </label>
           <Input
-            type="text"
-            id="invitation-code"
+            @type="text"
+            @id="invitation-code"
+            @value={{this.inviteCode}}
             class="nes-input"
             placeholder="invitation code"
-            @value={{this.inviteCode}}
           />
-          <p class="nes-text is-success mt-4">Email tningjs@outlook.com to get a code</p>
+          <p class="nes-text is-success mt-4">
+            Email tningjs@outlook.com to get a code
+          </p>
         </div>
         <div class="display-flex justify-space-between">
           <button
@@ -95,14 +112,14 @@
           Sign up error
         </p>
         <p class="nes-text is-error">
-          Username already exist
+          {{this.errorMessage}}
         </p>
         <button
           type="button"
           class="nes-btn is-primary"
           {{on "click" this.reset}}
         >
-          Try different name
+          Try Again
         </button>
       </div>
     {{else if (eq this.currentState this.state.invalidInviteCode)}}

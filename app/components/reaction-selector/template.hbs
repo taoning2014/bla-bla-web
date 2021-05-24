@@ -1,5 +1,7 @@
 {{#each this.reactions as |reaction|}}
-  <button type="button" {{on "click" (fn this.chooseReaction reaction)}}>
-    <i class={{reaction}}></i>
-  </button>
+  <i
+    class={{reaction}}
+    role="button"
+    {{on "click" (fn @chooseReaction reaction)}}
+  ></i>
 {{/each}}

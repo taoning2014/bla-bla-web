@@ -1,6 +1,7 @@
 <Layout as |layout|>
   <layout.body>
     {{#if (eq this.currentState this.state.login)}}
+        <img src="/assets/images/logo.png" alt="bla bla" />
       <div class="nes-container with-title">
         <p class="title">
           Login to see our secret world
@@ -29,9 +30,13 @@
             placeholder="password"
           />
           {{#if this.isResetPasswordSucceed}}
-            <p class="nes-text is-success">An email is sent to reset your password</p>
-          {{else }}
-            <a href="#" {{on 'click' (set this 'isShowResetPassword' true)}}>Forget password?</a>
+            <p class="nes-text is-success">
+              An email is sent to reset your password
+            </p>
+          {{else}}
+            <a href="#" {{on "click" (set this "isShowResetPassword" true)}}>
+              Forget password?
+            </a>
           {{/if}}
         </div>
         {{#if this.isShowResetPassword}}

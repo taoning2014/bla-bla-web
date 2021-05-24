@@ -1,0 +1,20 @@
+.mb-reaction-box {
+  position: fixed;
+  left: 32px;
+  bottom: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.mb-reaction-container {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+
+.mb-reaction-list {
+  padding: 8px 16px;
+  background-color: #F0F0F0;
+  margin-left: 16px;
+  border-radius: 10px;
+}

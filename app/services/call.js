@@ -3,6 +3,7 @@ import AgoraRTC from 'agora-rtc-sdk-ng';
 import { inject as service } from '@ember/service';
 import ENV from 'metal-bat-web/config/environment';
 import { tracked } from '@glimmer/tracking';
+import { assert } from '@ember/debug';
 
 export default class CallService extends Service {
   @service authentication;
@@ -49,7 +50,19 @@ export default class CallService extends Service {
     this.client.enableAudioVolumeIndicator();
     this._addCallEvents();
 
-    // Add custom events from outside
+    this.addCustomEvents(events);
+  }
+
+  /**
+   * Add custom events from outside
+   * @param {Map<string eventName, function callback>} events
+   */
+  addCustomEvents(events = {}) {
+    assert(
+      'Agora client must be created before custom events are added',
+      !!this.client
+    );
+
     for (const [eventName, eventCallback] of Object.entries(events)) {
       this.client.on(eventName, eventCallback);
     }

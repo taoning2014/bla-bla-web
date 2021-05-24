@@ -155,9 +155,6 @@
                 @state={{guest.state}}
               >
                 <div class="display-flex flex-column align-items-center">
-                  {{#if guest.reaction}}
-                    <i class="avatar-reaction {{guest.reaction}}"></i>
-                  {{/if}}
                   {{#if this.canHostAGuest}}
                     <button
                       class="mt-1 {{if this.me.isSaving " is-disabled"}}"
@@ -240,22 +237,6 @@
           >
             📶
           </button>
-          {{#if this.isGuest}}
-            <button
-              type="button"
-              class="nes-btn is-primary"
-              {{on
-                "click"
-                (set
-                  this
-                  "openReactionsMenu"
-                  (if this.openReactionsMenu false true)
-                )
-              }}
-            >
-              React
-            </button>
-          {{/if}}
           {{#if this.isHost}}
             <button
               type="button"
@@ -273,11 +254,6 @@
             </button>
           {{/if}}
         </div>
-        {{#if this.openReactionsMenu}}
-          <section class="reaction-list mt-4">
-            <ReactionSelector @chooseReaction={{this.react}} />
-          </section>
-        {{/if}}
       </div>
       {{#if this.me.showStats}}
         <div class="nes-container with-title mb-4">
@@ -295,6 +271,7 @@
         </div>
       {{/if}}
       <Share @roomId={{this.roomId}} @hideGoToRoom={{true}} />
+      <ReactionBox />
     {{/if}}
   </layout.body>
 </Layout>

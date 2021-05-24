@@ -22,7 +22,6 @@ export default class AuthenticationRoomController extends Controller {
   @service call;
 
   @tracked currentState;
-  @tracked openReactionsMenu = false;
   @tracked isShowPoorNetworkQuality;
 
   @tracked roomUsers = new TrackedMap(); // <string UserId, TrackedObject RoomUser>
@@ -126,88 +125,68 @@ export default class AuthenticationRoomController extends Controller {
   }
 
   async setUpAgora() {
-    await this.call.startCall(this.roomId, {
-      'stream-message': (userId, message) => {
-        const textMessage = new TextDecoder().decode(message);
-        const guest = this.getRoomUser(userId);
-        if (guest) {
-          guest.reaction = textMessage;
-
-          if (guest.reactionTimeoutId) {
-            clearTimeout(guest.reactionTimeoutId);
-          }
-
-          guest.reactionTimeoutId = setTimeout(function () {
-            guest.reaction = undefined;
-            guest.reactionTimeoutId = undefined;
-          }, 10000);
-        }
-      },
-
-      'user-joined': async ({ uid }) => {
-        // check to avoid duplicate push
-        if (this.getRoomUser(uid)) {
-          return;
-        }
-
-        const [roomUser] = await this.findRoomUsers(uid);
-
-        this.roomNotice.push({
-          displayTimeMs: 2000,
-          type: 'is-primary',
-          message: `@${roomUser.get('username')} joined the room`,
-        });
-      },
-
-      /**
-       * In the case of user close the browser tab(instead of click "leave" button), we can use Agora's 'user-left' event
-       * to remove this user from the UI.
-       */
-      'user-left': async ({ uid }) => {
-        const [roomUser] = await this.findRoomUsers(uid);
-
-        this.roomNotice.push({
-          displayTimeMs: 2000,
-          type: '',
-          message: `@${roomUser.get('username')} left the room`,
-        });
-
-        // remove user from the glimmer tracked array, so that it disappear from the UI
-        this.roomUsers.delete(uid);
-      },
-
-      'network-quality': (stats) => {
-        if (!this.me) {
-          return;
-        }
-        const { downlinkNetworkQuality, uplinkNetworkQuality} = stats;
-
-        if (downlinkNetworkQuality >= 3 || uplinkNetworkQuality >= 3) {
-          this.isShowPoorNetworkQuality = true;
-        } else {
-          this.isShowPoorNetworkQuality = false;
-        }
-
-        this.me.downlinkNetworkQuality =
-          AGORA_NETWORK_QUALITY_MAP[downlinkNetworkQuality];
-        this.me.uplinkNetworkQuality =
-          AGORA_NETWORK_QUALITY_MAP[uplinkNetworkQuality];
-
-
-      },
-
-      'volume-indicator': (volumes) => {
-        volumes.forEach((item) => {
-          const { level, uid } = item;
-          const roomUser = this.getRoomUser(uid);
-          if (roomUser && roomUser.state !== USER_STATE.MUTED) {
-            roomUser.state = level > 5 ? USER_STATE.SPEAK : USER_STATE.IDLE;
-          }
-        });
-      },
-    });
-
     try {
+      await this.call.startCall(this.roomId, {
+        'user-joined': async ({ uid }) => {
+          // check to avoid duplicate push
+          if (this.getRoomUser(uid)) {
+            return;
+          }
+
+          const [roomUser] = await this.findRoomUsers(uid);
+
+          this.roomNotice.push({
+            displayTimeMs: 2000,
+            type: 'is-primary',
+            message: `@${roomUser.get('username')} joined the room`,
+          });
+        },
+
+        /**
+         * In the case of user close the browser tab(instead of click "leave" button), we can use Agora's 'user-left' event
+         * to remove this user from the UI.
+         */
+        'user-left': async ({ uid }) => {
+          const [roomUser] = await this.findRoomUsers(uid);
+
+          this.roomNotice.push({
+            displayTimeMs: 2000,
+            type: '',
+            message: `@${roomUser.get('username')} left the room`,
+          });
+
+          // remove user from the glimmer tracked array, so that it disappear from the UI
+          this.roomUsers.delete(uid);
+        },
+
+        'network-quality': (stats) => {
+          if (!this.me) {
+            return;
+          }
+          const { downlinkNetworkQuality, uplinkNetworkQuality } = stats;
+
+          if (downlinkNetworkQuality >= 3 || uplinkNetworkQuality >= 3) {
+            this.isShowPoorNetworkQuality = true;
+          } else {
+            this.isShowPoorNetworkQuality = false;
+          }
+
+          this.me.downlinkNetworkQuality =
+            AGORA_NETWORK_QUALITY_MAP[downlinkNetworkQuality];
+          this.me.uplinkNetworkQuality =
+            AGORA_NETWORK_QUALITY_MAP[uplinkNetworkQuality];
+        },
+
+        'volume-indicator': (volumes) => {
+          volumes.forEach((item) => {
+            const { level, uid } = item;
+            const roomUser = this.getRoomUser(uid);
+            if (roomUser && roomUser.state !== USER_STATE.MUTED) {
+              roomUser.state = level > 5 ? USER_STATE.SPEAK : USER_STATE.IDLE;
+            }
+          });
+        },
+      });
       this.currentState = this.state.READY;
     } catch (e) {
       this.currentState = this.state.ERROR.AGORA_CONNECT_FAIL;
@@ -275,6 +254,10 @@ export default class AuthenticationRoomController extends Controller {
             }
             break;
           case USER_STATE.RAISE_HAND:
+            if (this.isHost) {
+              this.me.isShowAudienceDetails = true;
+            }
+
             {
               this.roomNotice.push({
                 displayTimeMs: 5000,
@@ -443,11 +426,5 @@ export default class AuthenticationRoomController extends Controller {
     await this.me.save();
 
     this.me.isSaving = false;
-  }
-
-  @action
-  react(reaction) {
-    this.openReactionsMenu = false;
-    this.call.sendTextMessage(reaction);
   }
 }

@@ -59,7 +59,7 @@ export default class AuthenticationCreateRoomController extends Controller {
   }
 
   @action
-  updateDate([date]) {
+  updateDate(date) {
     this.scheduledTime = date.getTime();
   }
 

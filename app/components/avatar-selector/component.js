@@ -6,16 +6,14 @@ export default class AvatarComponent extends Component {
   @tracked avatar = this.args.currentAvatar;
 
   avatars = [
-    'nes-mario',
-    'nes-ash',
-    'nes-pokeball',
-    'nes-kirby',
     'big-stinky-pete',
     'camel',
     'lineshooter',
     'shine-stein',
     'tight-fisted',
     'yardbird',
+    'lora',
+    'jonna',
   ];
 
   @action

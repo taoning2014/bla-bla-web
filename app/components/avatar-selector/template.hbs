@@ -1,5 +1,6 @@
 {{#each this.avatars as |avatar|}}
   <button
+    class="mb-3"
     type="button"
     {{on "click" (fn this.chooseAvatar avatar)}}
   >

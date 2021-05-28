@@ -1,1 +1,19 @@
 {{outlet}}
+
+{{#if this.showBottomNav}}
+  <nav id="bottom-nav" class="nes-container">
+    You're in a call!
+    {{#if this.call.muted}}
+      <button class="nes-btn is-primary" {{on "click"  this.unmute}}>
+        Unmute
+      </button>
+    {{else}}
+      <button class="nes-btn is-primary" {{on "click" this.mute}}>
+        Mute
+      </button>
+    {{/if}}
+    <button class="nes-btn is-primary" {{on "click" this.endCall}}>
+      End Call
+    </button>
+  </nav>
+{{/if}}

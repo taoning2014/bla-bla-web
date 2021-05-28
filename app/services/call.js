@@ -27,6 +27,16 @@ export default class CallService extends Service {
   client;
 
   /**
+   * Returns true if there is a call in progress
+   */
+  @tracked inProgress = false;
+
+  /**
+   * Room ID of the call if we're in one
+   */
+  @tracked roomId;
+
+  /**
    * Join a call
    * @param {string} roomId
    * @param {Object<string : eventName, function: callback>} [events]
@@ -38,7 +48,7 @@ export default class CallService extends Service {
     }
     AgoraRTC.setLogLevel(4);
     this.client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
-    this.client.roomId = roomId;
+    this.roomId = roomId;
     const token = await this._fetchToken(roomId);
     await this.client.join(
       ENV.AGORA_ENV.APP_ID,
@@ -51,6 +61,8 @@ export default class CallService extends Service {
     this._addCallEvents();
 
     this.addCustomEvents(events);
+
+    this.inProgress = true;
   }
 
   /**
@@ -88,6 +100,7 @@ export default class CallService extends Service {
     this.localAudioTrack = undefined;
     await this.client?.leave();
     this.client = undefined;
+    this.inProgress = false;
   }
 
   sendTextMessage(message) {
@@ -124,7 +137,7 @@ export default class CallService extends Service {
     const userId = this.authentication.getUserId();
     try {
       const tokenResponse = await fetch(
-        `${ENV.BLA_BLA_API}?channel=${this.client.roomId}&user=${userId}`,
+        `${ENV.BLA_BLA_API}?channel=${this.roomId}&user=${userId}`,
         {
           mode: 'cors',
         }

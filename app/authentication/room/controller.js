@@ -177,6 +177,22 @@ export default class AuthenticationRoomController extends Controller {
             AGORA_NETWORK_QUALITY_MAP[uplinkNetworkQuality];
         },
 
+        // User muted
+        'user-unpublished': ({ uid }) => {
+          const roomUser = this.getRoomUser(uid);
+          if (roomUser) {
+            roomUser.state = USER_STATE.MUTED;
+          }
+        },
+
+        // User unmuted
+        'user-published': ({ uid }) => {
+          const roomUser = this.getRoomUser(uid);
+          if (roomUser) {
+            roomUser.state = USER_STATE.IDLE;
+          }
+        },
+
         'volume-indicator': (volumes) => {
           volumes.forEach((item) => {
             const { level, uid } = item;
@@ -325,7 +341,7 @@ export default class AuthenticationRoomController extends Controller {
   }
 
   async disconnectUser() {
-    if (this.isDisconnectUser) {
+    if (!this.call.inProgress) {
       return;
     }
 
@@ -340,8 +356,6 @@ export default class AuthenticationRoomController extends Controller {
     // unsubscribe live query
     this._roomLiveQuery.unsubscribe();
     this._roomUserLiveQuery.unsubscribe();
-
-    this.isDisconnectUser = true;
   }
 
   @action

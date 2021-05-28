@@ -1,6 +1,8 @@
+$bottom-nav-height: 100px;
+
 .layout-container {
   width: 100vw;
-  height: 100vh;
+  padding-bottom: $bottom-nav-height;
   display: flex;
   flex-direction: column;
 }
@@ -11,6 +13,14 @@
 }
 
 .layout-head {
+}
+
+#bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: $bottom-nav-height;
+  background: white;
 }
 
 .layout-body {

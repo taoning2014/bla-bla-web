@@ -8,38 +8,33 @@ export default class AuthenticationRoomRoute extends Route {
     const roomQuery = new this.liveQuery.AV.Query('Room');
     let room;
 
+    const controller = this.controllerFor(this.routeName);
+    this.shouldJoin = false;
+
+    // Only disconnect the user from an existing call when they enter a new room
+    if (roomId !== controller.roomId) {
+      await controller.disconnectUser();
+      controller.roomUsers.clear();
+      controller.currentState = controller.state.LOADING;
+      controller.roomId = roomId;
+      this.shouldJoin = true;
+    }
+
     try {
       room = await roomQuery.get(roomId);
-      this.isLeanCloudError = false;
+      controller.isLeanCloudError = false;
     } catch (e) {
-      this.isLeanCloudError = true;
+      controller.isLeanCloudError = true;
       return;
     }
 
-    this.roomId = roomId;
     return room.toJSON();
   }
 
-  setupController(controller, model) {
-    super.setupController(controller, model);
-
-    if (this.isLeanCloudError) {
-      controller.currentState = controller.state.ERROR.LEAN_CLOUD;
-      return;
+  async setupController(controller) {
+    super.setupController(...arguments);
+    if (this.shouldJoin) {
+      await controller.join();
     }
-
-    controller.currentState = controller.state.LOADING;
-    controller.roomId = this.roomId;
-    controller.join();
-    controller.isDisconnectUser = false;
-  }
-
-  resetController(controller) {
-    controller.roomUsers.clear();
-  }
-
-  @action
-  willTransition() {
-    this.controller.disconnectUser();
   }
 }

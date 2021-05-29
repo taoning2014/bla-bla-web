@@ -25,7 +25,7 @@ export default class AuthenticationHomeRoute extends Route {
       'createdAt',
       twoHoursAgo
     );
-    // For scheduled room, get the ones that scheduled time are within past two hours window
+    // For scheduled room, get the ones that scheduled time are >= past two hours
     const scheduledRoomQuery = new this.liveQuery.AV.Query(
       'Room'
     ).greaterThanOrEqualTo('scheduledTime', Date.now() - 2 * ONE_HOUR);

@@ -5,6 +5,14 @@ import ENV from 'metal-bat-web/config/environment';
 import { tracked } from '@glimmer/tracking';
 import { assert } from '@ember/debug';
 
+const LOG_LEVEL = {
+  DEBUG: 0,
+  INFO: 1,
+  WARNING: 2,
+  ERROR: 3,
+  NONE: 4,
+}
+
 export default class CallService extends Service {
   @service authentication;
 
@@ -46,7 +54,12 @@ export default class CallService extends Service {
     if (this.client) {
       this.end();
     }
-    AgoraRTC.setLogLevel(4);
+    if (ENV.environment === 'development') {
+      AgoraRTC.enableLogUpload();
+      AgoraRTC.setLogLevel(LOG_LEVEL.DEBUG);
+    } else {
+      AgoraRTC.setLogLevel(LOG_LEVEL.NONE);
+    }
     this.client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
     this.roomId = roomId;
     const token = await this._fetchToken(roomId);

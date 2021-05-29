@@ -45,9 +45,7 @@ export default class AuthenticationCreateRoomController extends Controller {
         adminUserAvatar: this.authentication.avatar,
         adminUsername: this.authentication.getUsername(),
         description: { description: this.description },
-        scheduledTime: this.isScheduledRoom
-          ? this.scheduledTime.getTime()
-          : undefined,
+        scheduledTime: this.isScheduledRoom ? this.scheduledTime : undefined,
         title: this.title,
       });
       this.roomId = roomObj.id;
@@ -59,7 +57,7 @@ export default class AuthenticationCreateRoomController extends Controller {
   }
 
   @action
-  updateDate(date) {
+  updateDate([date]) {
     this.scheduledTime = date.getTime();
   }
 

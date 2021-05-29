@@ -11,7 +11,7 @@ const LOG_LEVEL = {
   WARNING: 2,
   ERROR: 3,
   NONE: 4,
-}
+};
 
 export default class CallService extends Service {
   @service authentication;

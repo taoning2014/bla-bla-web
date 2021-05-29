@@ -1,0 +1,16 @@
+<section class="nes-container with-title mb-4">
+  <p class="title">Messages</p>
+  {{#each @messages as |message|}}
+    <p>
+      <Avatar
+        @character={{message.user.avatar}}
+        @username={{message.user.username}}
+        @state={{message.user.state}}
+      />
+      {{message.message}}
+    </p>
+  {{/each}}
+  <form {{on "submit" this.sendMessage}}>
+    <Input type="text" @value={{this.message}} />
+  </form>
+</section>

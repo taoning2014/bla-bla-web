@@ -8,8 +8,10 @@ import {
   USER_ROLE,
   USER_STATE,
 } from 'metal-bat-web/utils/constants';
-import { TrackedMap } from 'tracked-built-ins';
+import { TrackedArray, TrackedMap } from 'tracked-built-ins';
 import { AVModelToTrackedObject } from 'metal-bat-web/utils/data-helpers';
+import { MESSAGE_PREFIXES } from 'metal-bat-web/utils/constants';
+
 export default class AuthenticationRoomController extends Controller {
   state = ROOM_STATE;
   userState = USER_STATE;
@@ -25,6 +27,7 @@ export default class AuthenticationRoomController extends Controller {
   @tracked isShowPoorNetworkQuality;
 
   @tracked roomUsers = new TrackedMap(); // <string UserId, TrackedObject RoomUser>
+  @tracked messages = new TrackedArray(); // List of Object<user: RoomUser, string: message>
 
   /**
    * Views into roomUsers
@@ -202,6 +205,22 @@ export default class AuthenticationRoomController extends Controller {
             }
           });
         },
+
+        'stream-message': (uid, message) => {
+          let textMessage = new TextDecoder().decode(message);
+          if (!textMessage.startsWith(MESSAGE_PREFIXES.MESSAGE)) {
+            return;
+          }
+          textMessage = textMessage.slice(MESSAGE_PREFIXES.MESSAGE);
+          // Limit to 5 messages
+          if (this.messages.length >= 5) {
+            this.messages.shift();
+          }
+          this.messages.push({
+            user: this.getRoomUser(uid),
+            message: textMessage,
+          });
+        },
       });
       this.currentState = this.state.READY;
     } catch (e) {
@@ -344,6 +363,10 @@ export default class AuthenticationRoomController extends Controller {
     if (!this.call.inProgress) {
       return;
     }
+
+    // Clear state
+    this.roomUsers.clear();
+    this.messages.clear();
 
     // disconnect call
     await this.call.end();

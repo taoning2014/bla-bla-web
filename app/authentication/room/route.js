@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 export default class AuthenticationRoomRoute extends Route {
   @service liveQuery;
 
@@ -14,7 +13,6 @@ export default class AuthenticationRoomRoute extends Route {
     // Only disconnect the user from an existing call when they enter a new room
     if (roomId !== controller.roomId) {
       await controller.disconnectUser();
-      controller.roomUsers.clear();
       controller.currentState = controller.state.LOADING;
       controller.roomId = roomId;
       this.shouldJoin = true;

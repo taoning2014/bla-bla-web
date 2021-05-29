@@ -270,6 +270,7 @@
           </p>
         </div>
       {{/if}}
+      <Messages @messages={{this.messages}} />
       <Share @roomId={{this.roomId}} @hideGoToRoom={{true}} />
       <ReactionBox />
     {{/if}}

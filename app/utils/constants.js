@@ -46,3 +46,8 @@ export const USER_STATE = {
   RAISE_HAND: 'raiseHand',
   SPEAK: 'speak',
 };
+
+export const MESSAGE_PREFIXES = {
+  MESSAGE: 'MESSAGE:',
+  REACTION: 'REACTION:',
+};

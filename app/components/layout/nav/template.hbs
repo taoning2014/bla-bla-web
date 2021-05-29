@@ -1,11 +1,9 @@
 <div
-  class="layout-nav display-flex justify-space-between align-items-center nes-container is-rounded is-dark m-0"
+  class="layout-nav display-flex justify-space-between align-items-flex-end nes-container is-rounded is-dark m-0"
 >
-  <div>
-    <LinkTo @route="authentication.settings">
-      <Avatar @character={{this.authentication.avatar}} @username={{this.username}} />
-    </LinkTo>
-  </div>
+  <LinkTo @route="authentication.home">
+    <img src="/assets/images/logo-small.png" height={{56}} alt="go to home" />
+  </LinkTo>
   <div class="display-flex flex-wrap">
     {{#if this.authentication.isAdmin}}
       <LinkTo @route="authentication.admin" class="nes-btn is-warning mr-4">
@@ -29,11 +27,29 @@
     >
       📝
     </a>
-    <LinkTo @route="authentication.settings" class="nes-btn is-primary mr-4">
-      ⚙️
-    </LinkTo>
-    <button type="button" class="nes-btn is-primary" {{on "click" this.logout}}>
-      🚪
-    </button>
+    <Dropdown as |dropdown|>
+      <dropdown.trigger>
+        <i class="{{this.authentication.avatar}} mb-avatar--small"></i>
+      </dropdown.trigger>
+      <dropdown.content>
+        <dropdown.item>
+          <LinkTo
+            @route="authentication.settings"
+            class="nes-btn"
+          >
+            Settings
+          </LinkTo>
+        </dropdown.item>
+        <dropdown.item>
+          <button
+            type="button"
+            class="nes-btn"
+            {{on "click" this.logout}}
+          >
+            Logout
+          </button>
+        </dropdown.item>
+      </dropdown.content>
+    </Dropdown>
   </div>
 </div>

@@ -1,34 +1,20 @@
 <div
-  class="layout-head display-flex justify-space-between align-items-center flex-wrap pv-2"
+  class="layout-head display-flex justify-space-end pv-2"
 >
-  <div class="ml-6">
-    <p>
-      <span class="nes-badge">
-        <span class="is-error">
-          Title
-        </span>
-      </span>
-      {{this.title}}
-    </p>
-    <p>
-      <span class="nes-badge">
-        <span class="is-warning">
-          Description
-        </span>
-      </span>
-      {{this.description}}
-      <i class="nes-icon heart"></i>
-    </p>
-  </div>
-  <div class="display-flex">
-    {{yield}}
-    {{#if this.roomNotice.notice}}
-      <p class="nes-balloon align-self-flex-start">
+  <div class="display-flex mb-notification">
+    {{#if @roomNotice.notice}}
+      <p class="nes-balloon from-right align-self-flex-start">
         <span
-          class="nes-text {{this.roomNotice.notice.type}}"
-        >{{this.roomNotice.notice.message}}</span>
+          class="nes-text {{@roomNotice.notice.type}}"
+        >{{@roomNotice.notice.message}}</span>
+      </p>
+    {{else if @talk}}
+      <p class="nes-balloon from-right align-self-flex-start">
+        <span
+          class="nes-text is-primary"
+        >{{@talk}}</span>
       </p>
     {{/if}}
-    <i class="nao-nao animate"></i>
+    <i class="nao-nao animate mt-5"></i>
   </div>
 </div>

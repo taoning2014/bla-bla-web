@@ -27,6 +27,7 @@ samp {
 @import 'components/layout';
 @import 'components/reaction-box';
 @import 'components/spinner';
+@import 'components/dropdown';
 
 // Avatars
 @import 'avatars/big-stinky-pete';
@@ -56,7 +57,7 @@ samp {
   right: 24px;
 }
 
-.mb-room a {
+.mb-home a {
   &,
   &:hover,
   &:focus,
@@ -66,6 +67,15 @@ samp {
   }
 }
 
+.mb-room {
+  $head-section-offset: -128px;
+  margin-top: $head-section-offset;
+}
+
 .mb-avatar {
   width: 144px;
+}
+
+.mb-notification {
+  z-index: 2;
 }

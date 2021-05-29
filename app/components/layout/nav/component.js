@@ -10,6 +10,8 @@ export default class LayoutNavComponent extends Component {
     return this.authentication.getUsername();
   }
 
+
+
   @action
   logout() {
     this.authentication.logOut();

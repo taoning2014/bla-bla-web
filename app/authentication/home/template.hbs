@@ -4,10 +4,33 @@
       type="button"
       class="nes-btn is-primary mr-4"
       {{on "click" (set this "isShowReleaseModal" true)}}
-    >💡</button>
+    >
+      💡
+    </button>
   </layout.nav>
-  <layout.head />
-  <layout.body class="mb-room">
+  <layout.head @talk="Welcome new friends"/>
+  <layout.body class="mb-home">
+    <a
+      class="nes-container is-rounded mb-4"
+      href="https://bla-bla.club/talkwithmichael/"
+      target="_blank"
+      rel="noreferrer noopener"
+    >
+      <p class="nes-text is-primary">
+        Title: Talk With Michael
+      </p>
+      <p>
+        Description: Click here to visit our past episodes of selective content
+      </p>
+      <Avatar
+        @character="tight-fisted"
+        @username="Michael"
+      >
+        <span class="nes-text is-success">
+          Host
+        </span>
+      </Avatar>
+    </a>
     {{#each this.model.rooms as |room|}}
       <Room @room={{room}} />
     {{/each}}
@@ -41,7 +64,8 @@
       <div class="mb-4">
         <p class="nes-text is-error">
           Thank you, Sean Johnson, for adding tons of useful features with us.
-          Sean, you are our superhero.<i class="nes-icon heart"></i>
+          Sean, you are our superhero.
+          <i class="nes-icon heart"></i>
         </p>
         <i class="nes-mario"></i>
         <i class="nes-ash"></i>
@@ -56,6 +80,10 @@
         Try it out
       </button>
     </div>
-    <span class="mb-app-version">Version: {{app-version versionOnly=true}} Beta</span>
+    <span class="mb-app-version">
+      Version:
+      {{app-version versionOnly=true}}
+      Beta
+    </span>
   </ModalDialog>
 {{/if}}

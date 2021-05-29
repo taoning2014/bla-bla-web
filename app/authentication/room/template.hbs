@@ -1,11 +1,32 @@
 <Layout as |layout|>
   <layout.nav />
-  <layout.head
-    @title={{this.model.title}}
-    @description={{this.model.description.description}}
-    @roomNotice={{this.roomNotice}}
-  />
-  <layout.body class="pb-6">
+  <layout.head @roomNotice={{this.roomNotice}} />
+  <layout.body class="mb-room pb-6">
+    <div class="nes-container with-title mb-4">
+      <p class="title">
+        Room
+      </p>
+      <p>
+        <span class="nes-badge">
+          <span class="is-error">
+            Title
+          </span>
+        </span>
+        {{this.model.title}}
+      </p>
+      <p>
+        <span class="nes-badge">
+          <span class="is-warning">
+            Description
+          </span>
+        </span>
+        {{#if this.model.description.description}}
+          {{this.model.description.description}}
+        {{else}}
+          Welcome new friends<i class="nes-icon heart"></i>
+        {{/if}}
+      </p>
+    </div>
     {{#if (eq this.currentState this.state.LOADING)}}
       <div class="nes-container with-title mb-4">
         <p class="title">

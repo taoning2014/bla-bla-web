@@ -614,6 +614,10 @@
   justify-content: space-between !important;
 }
 
+.justify-space-end {
+  justify-content: flex-end !important;
+}
+
 .justify-space-evenly {
   justify-content: space-evenly !important;
 }
@@ -634,9 +638,14 @@
   align-items: flex-start !important;
 }
 
+.align-items-flex-end {
+  align-items: flex-end !important;
+}
+
 .align-self-flex-start {
   align-self: flex-start !important;
 }
+
 
 .flex-wrap {
   flex-wrap: wrap !important;

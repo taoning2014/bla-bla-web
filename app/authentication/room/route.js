@@ -25,6 +25,7 @@ export default class AuthenticationRoomRoute extends Route {
       controller.isLeanCloudError = false;
     } catch (e) {
       controller.isLeanCloudError = true;
+      this.shouldJoin = false;
       return;
     }
 

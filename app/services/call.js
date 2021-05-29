@@ -116,13 +116,14 @@ export default class CallService extends Service {
     this.inProgress = false;
   }
 
-  sendTextMessage(message) {
-    this.client.sendStreamMessage(message);
+  sendMessage(topic, message) {
+    const _message = topic + message;
+    this.client.sendStreamMessage(_message);
     // Send it locally too, since Agora won't send it back
     this.client.emit(
       'stream-message',
       this.client.uid,
-      new TextEncoder().encode(message)
+      new TextEncoder().encode(_message)
     );
   }
 

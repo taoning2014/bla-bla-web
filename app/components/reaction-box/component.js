@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { MESSAGE_PREFIXES } from 'metal-bat-web/utils/constants';
+import { handleStreamMessage } from 'metal-bat-web/utils/data-helpers';
 
 function getRandomAnimation() {
   const animationList = [
@@ -31,14 +32,12 @@ export default class ReactionBoxComponent extends Component {
   constructor() {
     super(...arguments);
     this.call.addCustomEvents({
-      'stream-message': (userId, message) => {
-        const textMessage = new TextDecoder().decode(message);
-        if (textMessage.startsWith(MESSAGE_PREFIXES.REACTION)) {
-          this.displayNewReaction(
-            textMessage.slice(MESSAGE_PREFIXES.REACTION.length)
-          );
+      'stream-message': handleStreamMessage(
+        MESSAGE_PREFIXES.REACTION,
+        (userId, message) => {
+          this.displayNewReaction(message);
         }
-      },
+      ),
     });
   }
 
@@ -70,6 +69,6 @@ export default class ReactionBoxComponent extends Component {
 
   @action
   chooseReaction(reaction) {
-    this.call.sendTextMessage(MESSAGE_PREFIXES.REACTION + reaction);
+    this.call.sendMessage(MESSAGE_PREFIXES.REACTION, reaction);
   }
 }

@@ -12,6 +12,7 @@ import { TrackedArray, TrackedMap } from 'tracked-built-ins';
 import { AVModelToTrackedObject } from 'metal-bat-web/utils/data-helpers';
 import { MESSAGE_PREFIXES } from 'metal-bat-web/utils/constants';
 
+import { handleStreamMessage } from 'metal-bat-web/utils/data-helpers';
 export default class AuthenticationRoomController extends Controller {
   state = ROOM_STATE;
   userState = USER_STATE;
@@ -205,22 +206,19 @@ export default class AuthenticationRoomController extends Controller {
             }
           });
         },
-
-        'stream-message': (uid, message) => {
-          let textMessage = new TextDecoder().decode(message);
-          if (!textMessage.startsWith(MESSAGE_PREFIXES.MESSAGE)) {
-            return;
+        'stream-message': handleStreamMessage(
+          MESSAGE_PREFIXES.MESSAGE,
+          (uid, message) => {
+            // Limit to 5 messages
+            if (this.messages.length >= 5) {
+              this.messages.shift();
+            }
+            this.messages.push({
+              user: this.getRoomUser(uid),
+              message,
+            });
           }
-          textMessage = textMessage.slice(MESSAGE_PREFIXES.MESSAGE);
-          // Limit to 5 messages
-          if (this.messages.length >= 5) {
-            this.messages.shift();
-          }
-          this.messages.push({
-            user: this.getRoomUser(uid),
-            message: textMessage,
-          });
-        },
+        ),
       });
       this.currentState = this.state.READY;
     } catch (e) {

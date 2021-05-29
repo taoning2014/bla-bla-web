@@ -11,7 +11,7 @@ export default class ReactionBoxComponent extends Component {
   @action
   sendMessage(submitEvent) {
     submitEvent.preventDefault();
-    this.call.sendTextMessage(MESSAGE_PREFIXES.MESSAGE + this.message);
+    this.call.sendMessage(MESSAGE_PREFIXES.MESSAGE, this.message);
     this.message = '';
   }
 }

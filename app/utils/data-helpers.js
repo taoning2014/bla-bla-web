@@ -15,3 +15,18 @@ export const AVModelToTrackedObject = function (avModel) {
   trackedObject.save = avModel.save.bind(avModel);
   return trackedObject;
 };
+
+/**
+ * Listens for a stream message with a specific topic, then passes the parsed message to the callback
+ * @param {string} topic the channel to listen on (ex: reaction, message)
+ * @param {function} callback the function that handles
+ * @returns
+ */
+export function handleStreamMessage(topic, callback) {
+  return function (uid, message) {
+    let textMessage = new TextDecoder().decode(message);
+    if (textMessage.startsWith(topic)) {
+      callback(uid, textMessage.slice(topic.length));
+    }
+  };
+}

@@ -107,6 +107,7 @@ export default class AuthenticationRoomController extends Controller {
         state: USER_STATE.MUTED,
         isSelf: true,
       });
+      this.call.setUserRole(USER_ROLE.ADMIN);
     } else {
       roomUser = await this.liveQuery.createRoomUser({
         roomId: this.roomId,
@@ -116,6 +117,7 @@ export default class AuthenticationRoomController extends Controller {
         role: USER_ROLE.GUEST,
         state: USER_STATE.IDLE,
       });
+      this.call.setUserRole(USER_ROLE.GUEST);
     }
 
     // Push ourselves onto the room users
@@ -244,6 +246,7 @@ export default class AuthenticationRoomController extends Controller {
     this._roomUserLiveQuery.on('update', async (guest, [updateKey]) => {
       const userId = this.authentication.getUserId();
       const guestId = guest.get('userId');
+      const isSelf = userId === guestId;
       let roomUser = this.getRoomUser(guestId);
 
       if (updateKey === 'role') {
@@ -257,6 +260,10 @@ export default class AuthenticationRoomController extends Controller {
             type: 'is-success',
             message: `@${guest.get('username')} becomes host`,
           });
+
+          if (isSelf) {
+            this.call.setUserRole(USER_ROLE.HOST);
+          }
         } else if (guest.get('role') === USER_ROLE.GUEST) {
           roomUser.state = USER_STATE.IDLE;
 
@@ -266,7 +273,8 @@ export default class AuthenticationRoomController extends Controller {
             message: `@${guest.get('username')} becomes audience`,
           });
 
-          if (guestId === userId) {
+          if (isSelf) {
+            this.call.setUserRole(USER_ROLE.GUEST)
             this.call.mute();
           }
         }

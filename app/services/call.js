@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import ENV from 'metal-bat-web/config/environment';
 import { tracked } from '@glimmer/tracking';
 import { assert } from '@ember/debug';
+import { USER_ROLE } from 'metal-bat-web/utils/constants';
 
 const LOG_LEVEL = {
   DEBUG: 0,
@@ -43,6 +44,15 @@ export default class CallService extends Service {
    * Room ID of the call if we're in one
    */
   @tracked roomId;
+
+  /**
+   * The role of the user
+   */
+  @tracked role = USER_ROLE.GUEST;
+
+  get isHost() {
+    return this.role === USER_ROLE.ADMIN || this.role === USER_ROLE.HOST;
+  }
 
   constructor() {
     super(...arguments);
@@ -118,6 +128,10 @@ export default class CallService extends Service {
     await this.client?.leave();
     this.client = undefined;
     this.inProgress = false;
+  }
+
+  setUserRole(newRole) {
+    this.role = newRole;
   }
 
   sendMessage(topic, message) {

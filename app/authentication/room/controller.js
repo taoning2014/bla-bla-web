@@ -3,16 +3,17 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import {
-  AGORA_NETWORK_QUALITY_MAP,
+  MESSAGE_PREFIXES,
   ROOM_STATE,
   USER_ROLE,
   USER_STATE,
 } from 'metal-bat-web/utils/constants';
+import {
+  AVModelToTrackedObject,
+  handleStreamMessage,
+} from 'metal-bat-web/utils/data-helpers';
 import { TrackedArray, TrackedMap } from 'tracked-built-ins';
-import { AVModelToTrackedObject } from 'metal-bat-web/utils/data-helpers';
-import { MESSAGE_PREFIXES } from 'metal-bat-web/utils/constants';
 
-import { handleStreamMessage } from 'metal-bat-web/utils/data-helpers';
 export default class AuthenticationRoomController extends Controller {
   state = ROOM_STATE;
   userState = USER_STATE;
@@ -26,6 +27,7 @@ export default class AuthenticationRoomController extends Controller {
 
   @tracked currentState;
   @tracked isShowPoorNetworkQuality;
+  @tracked message;
 
   @tracked roomUsers = new TrackedMap(); // <string UserId, TrackedObject RoomUser>
   @tracked messages = new TrackedArray(); // List of Object<user: RoomUser, string: message>
@@ -175,11 +177,6 @@ export default class AuthenticationRoomController extends Controller {
           } else {
             this.isShowPoorNetworkQuality = false;
           }
-
-          this.me.downlinkNetworkQuality =
-            AGORA_NETWORK_QUALITY_MAP[downlinkNetworkQuality];
-          this.me.uplinkNetworkQuality =
-            AGORA_NETWORK_QUALITY_MAP[uplinkNetworkQuality];
         },
 
         // User muted
@@ -210,11 +207,7 @@ export default class AuthenticationRoomController extends Controller {
         'stream-message': handleStreamMessage(
           MESSAGE_PREFIXES.MESSAGE,
           (uid, message) => {
-            // Limit to 5 messages
-            if (this.messages.length >= 5) {
-              this.messages.shift();
-            }
-            this.messages.push({
+            this.messages.unshift({
               user: this.getRoomUser(uid),
               message,
             });
@@ -274,7 +267,7 @@ export default class AuthenticationRoomController extends Controller {
           });
 
           if (isSelf) {
-            this.call.setUserRole(USER_ROLE.GUEST)
+            this.call.setUserRole(USER_ROLE.GUEST);
             this.call.mute();
           }
         }
@@ -294,17 +287,11 @@ export default class AuthenticationRoomController extends Controller {
             }
             break;
           case USER_STATE.RAISE_HAND:
-            if (this.isHost) {
-              this.me.isShowAudienceDetails = true;
-            }
-
-            {
-              this.roomNotice.push({
-                displayTimeMs: 5000,
-                type: 'is-success',
-                message: `@${guest.get('username')} is raising hand`,
-              });
-            }
+            this.roomNotice.push({
+              displayTimeMs: 5000,
+              type: 'is-success',
+              message: `@${guest.get('username')} is raising hand`,
+            });
             break;
           case USER_STATE.SPEAK:
             /**
@@ -466,5 +453,12 @@ export default class AuthenticationRoomController extends Controller {
     await this.me.save();
 
     this.me.isSaving = false;
+  }
+
+  @action
+  sendMessage(submitEvent) {
+    submitEvent.preventDefault();
+    this.call.sendMessage(MESSAGE_PREFIXES.MESSAGE, this.message);
+    this.message = '';
   }
 }

@@ -2,172 +2,167 @@
   <layout.nav />
   <layout.head @roomNotice={{this.roomNotice}} />
   <layout.body class="mb-room pb-6">
-    <div class="nes-container with-title mb-4">
-      <p class="title">
-        Room
-      </p>
-      <p>
-        <span class="nes-badge">
-          <span class="is-error">
-            Title
+    <:default>
+      <div class="nes-container with-title mb-4">
+        <p class="title">
+          Room
+        </p>
+        <p>
+          <span class="nes-badge">
+            <span class="is-error">
+              Title
+            </span>
           </span>
-        </span>
-        {{this.model.title}}
-      </p>
-      <p>
-        <span class="nes-badge">
-          <span class="is-warning">
-            Description
+          {{this.model.title}}
+        </p>
+        <p>
+          <span class="nes-badge">
+            <span class="is-warning">
+              Description
+            </span>
           </span>
-        </span>
-        {{#if this.model.description.description}}
-          {{this.model.description.description}}
-        {{else}}
-          Welcome new friends<i class="nes-icon heart"></i>
-        {{/if}}
-      </p>
-    </div>
-    {{#if (eq this.currentState this.state.LOADING)}}
-      <div class="nes-container with-title mb-4">
-        <p class="title">
-          Loading data
-        </p>
-        <p class="nes-text is-primary">
-          We are preparing the room for you, it will be ready in a moment
-        </p>
-      </div>
-    {{else if (eq this.currentState this.state.ERROR.AGORA_CONNECT_FAIL)}}
-      <div class="nes-container with-title mb-4">
-        <p class="title">
-          Agora Connection Fail
-        </p>
-        <p class="nes-text is-error">
-          Sorry, there was a problem connecting to Agora.
-        </p>
-        <div class="display-flex">
-          <LinkTo @route="authentication.home">
-            <span class="nes-btn is-success">
-              Join Another Room
-            </span>
-          </LinkTo>
-        </div>
-      </div>
-    {{else if (eq this.currentState this.state.ERROR.LEAN_CLOUD)}}
-      <div class="nes-container with-title mb-4">
-        <p class="title">
-          LeanCloud Fail
-        </p>
-        <p class="nes-text is-error">
-          Sorry, there is a problem when we try connect to LeanCloud. Likely
-          because the room is destroyed.
-        </p>
-        <div class="display-flex">
-          <LinkTo @route="authentication.home">
-            <span class="nes-btn is-success">
-              Join Another Room
-            </span>
-          </LinkTo>
-        </div>
-      </div>
-    {{else if (eq this.currentState this.state.ERROR.API_SERVER)}}
-      <div class="nes-container with-title mb-4">
-        <p class="title">
-          API Server Fail
-        </p>
-        <p class="nes-text is-error">
-          Sorry, there is a problem when we try connect to API server, likely
-          because the API server is down.
-        </p>
-        <div class="display-flex">
-          <LinkTo @route="authentication.home">
-            <span class="nes-btn is-success">
-              Join Another Room
-            </span>
-          </LinkTo>
-        </div>
-      </div>
-    {{else if (eq this.currentState this.state.CLOSED)}}
-      <div class="nes-container with-title mb-4">
-        <p class="title">
-          Room is closed
-        </p>
-        <p class="nes-text is-error">
-          {{#if (eq this.me.role this.userRole.ADMIN)}}
-            The room is closed successfully
+          {{#if this.model.description.description}}
+            {{this.model.description.description}}
           {{else}}
-            The room is closed by the admin
+            Welcome new friends<i class="nes-icon heart"></i>
           {{/if}}
         </p>
-        <div class="display-flex">
-          <LinkTo @route="authentication.home">
-            <span class="nes-btn is-success">
-              Join Another Room
-            </span>
-          </LinkTo>
-        </div>
       </div>
-    {{else if (eq this.currentState this.state.READY)}}
-      <div class="nes-container with-title mb-4">
-        <p class="title">
-          Room is ready
-        </p>
-        <p class="nes-text is-primary">
-          Join the room to start chat with friends
-        </p>
-        <div class="display-flex justify-space-between">
-          <button
-            type="button"
-            class="nes-btn is-primary"
-            {{on "click" (set this "currentState" this.state.LOADED)}}
-          >
-            Join
-          </button>
-        </div>
-      </div>
-    {{else if (eq this.currentState this.state.LOADED)}}
-      {{#if this.isShowPoorNetworkQuality}}
-        <p class="nes-text is-error">
-          Poor network connection
-          <span class="spinner"></span>
-        </p>
-      {{/if}}
-      <div class="nes-container with-title mb-4">
-        <p class="title">
-          Host
-        </p>
-        <div>
-          {{#each this.hosts as |host|}}
-            <Avatar
-              @character={{host.avatar}}
-              @username={{host.username}}
-              @state={{host.state}}
-            >
-              {{#if (eq this.me.role this.userRole.ADMIN)}}
-                {{#unless host.isSelf}}
-                  <button
-                    class={{if this.me.isSaving " is-disabled"}}
-                    disabled={{this.me.isSaving}}
-                    type="button"
-                    {{on "click" (fn this.toggleHost host.userId)}}
-                  >
-                    Unhost
-                  </button>
-                {{/unless}}
-              {{/if}}
-            </Avatar>
-          {{/each}}
-        </div>
-      </div>
-      <div class="nes-container with-title mb-4">
-        <p class="title">
-          Audience
-        </p>
-        {{#if (and this.isHost (not this.me.isShowAudienceDetails))}}
-          <p class="nes-text is-primary">
-            Number of Audience in the room:
-            {{this.guests.length}}
+      {{#if (eq this.currentState this.state.LOADING)}}
+        <div class="nes-container with-title mb-4">
+          <p class="title">
+            Loading data
           </p>
-        {{else}}
+          <p class="nes-text is-primary">
+            We are preparing the room for you, it will be ready in a moment
+          </p>
+        </div>
+      {{else if (eq this.currentState this.state.ERROR.AGORA_CONNECT_FAIL)}}
+        <div class="nes-container with-title mb-4">
+          <p class="title">
+            Agora Connection Fail
+          </p>
+          <p class="nes-text is-error">
+            Sorry, there was a problem connecting to Agora.
+          </p>
+          <div class="display-flex">
+            <LinkTo @route="authentication.home">
+              <span class="nes-btn is-success">
+                Join Another Room
+              </span>
+            </LinkTo>
+          </div>
+        </div>
+      {{else if (eq this.currentState this.state.ERROR.LEAN_CLOUD)}}
+        <div class="nes-container with-title mb-4">
+          <p class="title">
+            LeanCloud Fail
+          </p>
+          <p class="nes-text is-error">
+            Sorry, there is a problem when we try connect to LeanCloud. Likely
+          because the room is destroyed.
+          </p>
+          <div class="display-flex">
+            <LinkTo @route="authentication.home">
+              <span class="nes-btn is-success">
+                Join Another Room
+              </span>
+            </LinkTo>
+          </div>
+        </div>
+      {{else if (eq this.currentState this.state.ERROR.API_SERVER)}}
+        <div class="nes-container with-title mb-4">
+          <p class="title">
+            API Server Fail
+          </p>
+          <p class="nes-text is-error">
+            Sorry, there is a problem when we try connect to API server, likely
+          because the API server is down.
+          </p>
+          <div class="display-flex">
+            <LinkTo @route="authentication.home">
+              <span class="nes-btn is-success">
+                Join Another Room
+              </span>
+            </LinkTo>
+          </div>
+        </div>
+      {{else if (eq this.currentState this.state.CLOSED)}}
+        <div class="nes-container with-title mb-4">
+          <p class="title">
+            Room is closed
+          </p>
+          <p class="nes-text is-error">
+            {{#if (eq this.me.role this.userRole.ADMIN)}}
+              The room is closed successfully
+            {{else}}
+              The room is closed by the admin
+            {{/if}}
+          </p>
+          <div class="display-flex">
+            <LinkTo @route="authentication.home">
+              <span class="nes-btn is-success">
+                Join Another Room
+              </span>
+            </LinkTo>
+          </div>
+        </div>
+      {{else if (eq this.currentState this.state.READY)}}
+        <div class="nes-container with-title mb-4">
+          <p class="title">
+            Room is ready
+          </p>
+          <p class="nes-text is-primary">
+            Join the room to start chat with friends
+          </p>
+          <div class="display-flex justify-space-between">
+            <button
+              type="button"
+              class="nes-btn is-primary"
+              {{on "click" (set this "currentState" this.state.LOADED)}}
+            >
+              Join
+            </button>
+          </div>
+        </div>
+      {{else if (eq this.currentState this.state.LOADED)}}
+        {{#if this.isShowPoorNetworkQuality}}
+          <p class="nes-text is-error">
+            Poor network connection
+            <span class="spinner"></span>
+          </p>
+        {{/if}}
+        <div class="nes-container with-title mb-4">
+          <p class="title">
+            Host
+          </p>
+          <div>
+            {{#each this.hosts as |host|}}
+              <Avatar
+                @character={{host.avatar}}
+                @username={{host.username}}
+                @state={{host.state}}
+              >
+                {{#if (eq this.me.role this.userRole.ADMIN)}}
+                  {{#unless host.isSelf}}
+                    <button
+                      class={{if this.me.isSaving " is-disabled"}}
+                      disabled={{this.me.isSaving}}
+                      type="button"
+                      {{on "click" (fn this.toggleHost host.userId)}}
+                    >
+                      Unhost
+                    </button>
+                  {{/unless}}
+                {{/if}}
+              </Avatar>
+            {{/each}}
+          </div>
+        </div>
+        <div class="nes-container with-title mb-4">
+          <p class="title">
+            Audience
+          </p>
           <div>
             {{#each this.guests as |guest|}}
               <Avatar
@@ -190,110 +185,105 @@
               </Avatar>
             {{/each}}
           </div>
-        {{/if}}
-      </div>
-      <div class="nes-container with-title mb-4">
-        <p class="title">
-          Control
-        </p>
-        <div class="display-flex justify-space-between flex-wrap">
-          {{#if (eq this.me.role this.userRole.GUEST)}}
-            <button
-              type="button"
-              class="nes-btn is-success {{if this.me.isSaving " is-disabled"}}"
-              disabled={{this.me.isSaving}}
-              {{on "click" this.toggleRaiseHand}}
-            >
-              {{if
-                (eq this.me.state this.userState.RAISE_HAND)
-                "Undo🙆🏻‍♀️"
-                "Raise🙋🏻‍♀️"
-              }}
-            </button>
-          {{/if}}
-          {{#if
-            (or
-              (eq this.me.role this.userRole.ADMIN) this.authentication.isAdmin
-            )
-          }}
-            <button
-              type="button"
-              class="nes-btn is-primary {{if this.me.isSaving " is-disabled"}}"
-              disabled={{this.me.isSaving}}
-              {{on "click" this.closeRoom}}
-            >
-              Close
-            </button>
-          {{/if}}
-          <button
-            type="button"
-            class="nes-btn is-primary {{if this.me.isSaving " is-disabled"}}"
-            disabled={{this.me.isSaving}}
-            {{on "click" this.leaveRoom}}
-          >
-            Leave
-          </button>
-          {{#if
-            (or
-              (eq this.me.role this.userRole.ADMIN)
-              (eq this.me.role this.userRole.HOST)
-            )
-          }}
-            <button
-              type="button"
-              class="nes-btn is-primary {{if this.me.isSaving " is-disabled"}}"
-              disabled={{this.me.isSaving}}
-              {{on "click" this.toggleMute}}
-            >
-              {{if (eq this.me.state this.userState.MUTED) "Unmute" "Mute"}}
-            </button>
-          {{/if}}
-          <button
-            type="button"
-            class="nes-btn is-primary"
-            {{on
-              "click"
-              (set this "me.showStats" (if this.me.showStats false true))
-            }}
-          >
-            📶
-          </button>
-          {{#if this.isHost}}
-            <button
-              type="button"
-              class="nes-btn is-primary"
-              {{on
-                "click"
-                (set
-                  this
-                  "me.isShowAudienceDetails"
-                  (if this.me.isShowAudienceDetails false true)
-                )
-              }}
-            >
-              {{if this.me.isShowAudienceDetails "🔒" "🔓"}}
-            </button>
-          {{/if}}
         </div>
-      </div>
-      {{#if this.me.showStats}}
-        <div class="nes-container with-title mb-4">
-          <p class="title">
-            In call stats
-          </p>
-          <p class="nes-text">
-            Downlink:
-            {{this.me.downlinkNetworkQuality}}
-          </p>
-          <p class="nes-text">
-            Uplink:
-            {{this.me.uplinkNetworkQuality}}
-          </p>
+        <Messages @messages={{this.messages}} />
+        <Share @roomId={{this.roomId}} @hideGoToRoom={{true}} />
+        <ReactionBox />
+      {{/if}}
+    </:default>
+    <:bottom>
+      {{#if (eq this.currentState this.state.LOADED)}}
+        <div class="bottom-nav nes-container">
+          <div
+            class="bottom-nav-content display-flex justify-space-between align-items-center flex-wrap"
+          >
+            {{#if this.me.showMessageInput}}
+              <form class="mb-message-form" {{on "submit" this.sendMessage}}>
+                <Input
+                  class="mb-message-input mr-4"
+                  @type="text"
+                  @value={{this.message}}
+                />
+                <button class="nes-btn is-primary mr-4" type="submit">
+                  Send
+                </button>
+                <i
+                  role="button"
+                  class="nes-icon close is-small"
+                  {{on "click" (set this "me.showMessageInput" false)}}
+                ></i>
+              </form>
+            {{else}}
+              <div>
+                {{#if (eq this.me.role this.userRole.GUEST)}}
+                  <button
+                    type="button"
+                    class="nes-btn is-warning
+                      {{if this.me.isSaving " is-disabled"}}"
+                    disabled={{this.me.isSaving}}
+                    {{on "click" this.toggleRaiseHand}}
+                  >
+                    {{if
+                      (eq this.me.state this.userState.RAISE_HAND)
+                      "Undo"
+                      "Raise"
+                    }}
+                  </button>
+                {{/if}}
+                {{#if
+                  (or
+                    (eq this.me.role this.userRole.ADMIN)
+                    (eq this.me.role this.userRole.HOST)
+                  )
+                }}
+                  <button
+                    type="button"
+                    class="nes-btn is-warning
+                      {{if this.me.isSaving " is-disabled"}}"
+                    disabled={{this.me.isSaving}}
+                    {{on "click" this.toggleMute}}
+                  >
+                    {{if (eq this.me.state this.userState.MUTED) "Unmute" "Mute"
+                    }}
+                  </button>
+                {{/if}}
+                <button
+                  type="button"
+                  class="nes-btn is-primary"
+                  {{on "click" (set this "me.showMessageInput" true)}}
+                >
+                  Discuss
+                </button>
+              </div>
+              <div>
+                {{#if
+                  (or
+                    (eq this.me.role this.userRole.ADMIN)
+                    this.authentication.isAdmin
+                  )
+                }}
+                  <button
+                    type="button"
+                    class="nes-btn {{if this.me.isSaving " is-disabled"}}"
+                    disabled={{this.me.isSaving}}
+                    {{on "click" this.closeRoom}}
+                  >
+                    Close
+                  </button>
+                {{/if}}
+                <button
+                  type="button"
+                  class="nes-btn {{if this.me.isSaving " is-disabled"}}"
+                  disabled={{this.me.isSaving}}
+                  {{on "click" this.leaveRoom}}
+                >
+                  Leave
+                </button>
+              </div>
+            {{/if}}
+          </div>
         </div>
       {{/if}}
-      <Messages @messages={{this.messages}} />
-      <Share @roomId={{this.roomId}} @hideGoToRoom={{true}} />
-      <ReactionBox />
-    {{/if}}
+    </:bottom>
   </layout.body>
 </Layout>

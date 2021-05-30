@@ -1,36 +1,42 @@
 {{outlet}}
 {{#if this.showBottomNav}}
-  <nav id="bottom-nav" class="nes-container">
-    In Call
-    {{#if this.call.isHost}}
-      {{#if this.call.muted}}
-        <button
-          type="button"
-          class="nes-btn is-primary"
-          {{on "click" this.unmute}}
-        >
-          Unmute
-        </button>
-      {{else}}
-        <button type="button" class="nes-btn is-primary" {{on "click" this.mute}}>
-          Mute
-        </button>
-      {{/if}}
-    {{/if}}
-    <LinkTo @route="authentication.room" @model={{this.call.roomId}}>
+  <nav class="bottom-nav nes-container">
+    <div
+      class="bottom-nav-content display-flex justify-space-between align-items-center flex-wrap"
+    >
+      <div>
+        {{#if this.call.isHost}}
+          {{#if this.call.muted}}
+            <button
+              type="button"
+              class="nes-btn is-warning"
+              {{on "click" this.unmute}}
+            >
+              Unmute
+            </button>
+          {{else}}
+            <button
+              type="button"
+              class="nes-btn is-warning"
+              {{on "click" this.mute}}
+            >
+              Mute
+            </button>
+          {{/if}}
+        {{/if}}
+        <LinkTo @route="authentication.room" @model={{this.call.roomId}}>
+          <button type="button" class="nes-btn is-primary">
+            Rejoin Room
+          </button>
+        </LinkTo>
+      </div>
       <button
         type="button"
-        class="nes-btn is-primary"
+        class="nes-btn"
+        {{on "click" this.endCall}}
       >
-        Rejoin Room
+        Leave
       </button>
-    </LinkTo>
-    <button
-      type="button"
-      class="nes-btn is-error"
-      {{on "click" this.endCall}}
-    >
-      End Call
-    </button>
+    </div>
   </nav>
 {{/if}}

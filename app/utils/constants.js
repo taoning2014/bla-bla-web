@@ -4,16 +4,6 @@ export const ONE_DAY = 24 * ONE_HOUR;
 
 export const INVITATION_CODE_LENGTH = 10;
 
-export const AGORA_NETWORK_QUALITY_MAP = {
-  0: 'Unknown',
-  1: 'Excellent',
-  2: 'Good',
-  3: 'Fair',
-  4: 'Bad',
-  5: 'Very bad',
-  6: 'Offline',
-};
-
 export const FEATURE_LIST = {
   SHOW_RELEASE_MODAL: 'showReleaseModal',
 };

@@ -374,10 +374,6 @@ export default class AuthenticationRoomController extends Controller {
     // unsubscribe live query
     this._roomLiveQuery.unsubscribe();
     this._roomUserLiveQuery.unsubscribe();
-
-    // Clear state
-    this.roomUsers.clear();
-    this.messages.clear();
   }
 
   @action

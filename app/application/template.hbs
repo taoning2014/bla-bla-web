@@ -1,7 +1,7 @@
 {{outlet}}
 {{#if this.showBottomNav}}
   <nav id="bottom-nav" class="nes-container">
-    You're in a call!
+    In Call
     {{#if this.call.muted}}
       <button
         type="button"
@@ -15,9 +15,17 @@
         Mute
       </button>
     {{/if}}
+    {{#link-to "authentication.room" this.call.roomId}}
+      <button
+        type="button"
+        class="nes-btn is-primary"
+      >
+        Rejoin Room
+      </button>
+    {{/link-to}}
     <button
       type="button"
-      class="nes-btn is-primary"
+      class="nes-btn is-error"
       {{on "click" this.endCall}}
     >
       End Call

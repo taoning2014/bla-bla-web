@@ -77,10 +77,9 @@ export default class AuthenticationRoomController extends Controller {
     return this.me.role === USER_ROLE.GUEST;
   }
 
-  async join() {
+  async syncRoomUsers() {
     await this.findRoomUsers();
     await this.createRoomUser();
-    await this.joinChat();
   }
 
   async createRoomUser() {
@@ -437,6 +436,7 @@ export default class AuthenticationRoomController extends Controller {
     this.me.isSaving = true;
 
     await this.disconnectUser();
+    this.roomId = undefined;
 
     this.me.isSaving = false;
     this.router.transitionTo('authentication.home');

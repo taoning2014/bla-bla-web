@@ -89,7 +89,7 @@ export default class AuthenticationRoomController extends Controller {
     const isAdminUser = adminUserId === userId;
     let roomUser = this.me;
 
-    if (roomUser) {
+    if (roomUser && !roomUser.isDestroyed) {
       roomUser.role === USER_ROLE.GUEST
         ? roomUser.set('state', USER_STATE.IDLE)
         : roomUser.set('state', USER_STATE.MUTED);
@@ -368,6 +368,7 @@ export default class AuthenticationRoomController extends Controller {
     // remove roomUser from LeanCloud
     if (this.me) {
       this.me.destroy();
+      this.me.isDestroyed = true;
     }
 
     // unsubscribe live query

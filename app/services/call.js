@@ -44,6 +44,16 @@ export default class CallService extends Service {
    */
   @tracked roomId;
 
+  constructor() {
+    super(...arguments);
+    if (ENV.environment === 'development') {
+      AgoraRTC.enableLogUpload();
+      AgoraRTC.setLogLevel(LOG_LEVEL.DEBUG);
+    } else {
+      AgoraRTC.setLogLevel(LOG_LEVEL.NONE);
+    }
+  }
+
   /**
    * Join a call
    * @param {string} roomId
@@ -54,12 +64,7 @@ export default class CallService extends Service {
     if (this.client) {
       this.end();
     }
-    if (ENV.environment === 'development') {
-      AgoraRTC.enableLogUpload();
-      AgoraRTC.setLogLevel(LOG_LEVEL.DEBUG);
-    } else {
-      AgoraRTC.setLogLevel(LOG_LEVEL.NONE);
-    }
+
     this.client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
     this.roomId = roomId;
     const token = await this._fetchToken(roomId);
@@ -72,7 +77,6 @@ export default class CallService extends Service {
 
     this.client.enableAudioVolumeIndicator();
     this._addCallEvents();
-
     this.addCustomEvents(events);
 
     this.inProgress = true;

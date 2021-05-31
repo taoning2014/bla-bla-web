@@ -11,7 +11,9 @@ export default class AuthenticationRoomRoute extends Route {
 
     // If re-entering the same room while maintaining a call
     // we shouldn't rejoin/reconnect to Agora
-    this.shouldJoin = roomId !== controller.roomId;
+    this.shouldJoin =
+      roomId !== controller.roomId ||
+      controller.roomId != controller.call.roomId;
 
     // Only disconnect the user from an existing call when they enter a new room
     if (this.shouldJoin) {

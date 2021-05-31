@@ -128,6 +128,7 @@ export default class CallService extends Service {
     await this.client?.leave();
     this.client = undefined;
     this.inProgress = false;
+    this.roomId = undefined;
   }
 
   setUserRole(newRole) {

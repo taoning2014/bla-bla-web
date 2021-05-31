@@ -3,11 +3,11 @@
     {{#if (eq this.currentState this.state.signUp)}}
       <div class="nes-container with-title">
         <p class="title">
-          Let's get your passport ready ;)
+          {{t "register.title"}}
         </p>
         <div class="mb-4">
           <p class="nes-text is-primary">
-            Select your avatar
+            {{t "register.select_avatar"}}
           </p>
           <div
             class="display-flex justify-space-between align-items-flex-start flex-wrap"
@@ -20,7 +20,7 @@
         </div>
         <div class="nes-field mb-4">
           <label for="user-name">
-            Username
+            {{t "register.username"}}
           </label>
           <Input
             @type="text"
@@ -28,17 +28,17 @@
             @value={{this.username}}
             @key-up={{this.usernameKeyUp}}
             class="nes-input"
-            placeholder="username"
+            placeholder={{t "register.username"}}
           />
           {{#if this.usernameExceedLimit}}
             <p class="nes-text is-error">
-              Username too long, it should be less than 8 chars
+              {{t "register.username_too_long"}}
             </p>
           {{/if}}
         </div>
         <div class="nes-field mb-4">
           <label for="password">
-            Password
+            {{t "register.password"}}
           </label>
           <Input
             @type="password"
@@ -46,12 +46,12 @@
             @value={{this.password}}
             @key-up={{this.passwordKeyUp}}
             class="nes-input"
-            placeholder="password"
+            placeholder={{t "register.password"}}
           />
         </div>
         <div class="nes-field mb-4">
           <label for="retype-password">
-            Retype password
+            {{t "register.retype_password"}}
           </label>
           <Input
             @type="password"
@@ -59,34 +59,34 @@
             @value={{this.retypePassword}}
             @key-up={{this.passwordKeyUp}}
             class="nes-input"
-            placeholder="retype password"
+            placeholder={{t "register.retype_password"}}
           />
         </div>
         <div class="nes-field mb-4">
           <label for="user-email">
-            Email
+            {{t "register.email"}}
           </label>
           <Input
             @type="email"
             @id="user-email"
             @value={{this.email}}
             class="nes-input"
-            placeholder="email"
+            placeholder={{t "register.email"}}
           />
         </div>
         <div class="nes-field mb-4">
           <label for="invitation-code">
-            Invitation code
+            {{t "register.invitation_code"}}
           </label>
           <Input
             @type="text"
             @id="invitation-code"
             @value={{this.inviteCode}}
             class="nes-input"
-            placeholder="invitation code"
+            placeholder={{t "register.invitation_code"}}
           />
           <p class="nes-text is-success mt-4">
-            Email tningjs@outlook.com to get a code
+            {{t "register.email_to_get_code"}}
           </p>
         </div>
         <div class="display-flex justify-space-between">
@@ -97,11 +97,11 @@
             disabled={{this.isSignUpBtnDisabled}}
             {{on "click" this.signUp}}
           >
-            Sign up
+            {{t "register.sign_up"}}
           </button>
           <LinkTo @route="login">
             <span class="nes-btn is-error">
-              Back
+              {{t "register.back"}}
             </span>
           </LinkTo>
         </div>
@@ -109,7 +109,7 @@
     {{else if (eq this.currentState this.state.error)}}
       <div class="nes-container with-title">
         <p class="title">
-          Sign up error
+          {{t "register.sign_up_error"}}
         </p>
         <p class="nes-text is-error">
           {{this.errorMessage}}
@@ -119,23 +119,23 @@
           class="nes-btn is-primary"
           {{on "click" this.reset}}
         >
-          Try Again
+          {{t "register.try_again"}}
         </button>
       </div>
     {{else if (eq this.currentState this.state.invalidInviteCode)}}
       <div class="nes-container with-title">
         <p class="title">
-          Invalid Invite Code
+          {{t "register.invalid_code"}}
         </p>
         <p class="nes-text is-error">
-          Sorry, the Invite Code is invalid. Please get a new one. You can reach out to us at tningjs@outlook.com to get a valid code
+          {{t "register.invalid_code_content"}}
         </p>
         <button
           type="button"
           class="nes-btn is-primary"
           {{on "click" this.reset}}
         >
-          Try again
+          {{t "register.try_again"}}
         </button>
       </div>
     {{/if}}

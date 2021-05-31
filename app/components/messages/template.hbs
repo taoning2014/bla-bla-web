@@ -1,9 +1,9 @@
 <section class="nes-container with-title mb-4">
   <p class="title">
-    Messages
+    {{t "message.message"}}
   </p>
   {{#if (eq @messages.length 0)}}
-    <p class="nes-text is-primary">No one post any message yet</p>
+    <p class="nes-text is-primary">{{t "message.no_message"}}</p>
   {{else}}
     <ul class="mb-message-container">
       {{#each @messages as |message|}}

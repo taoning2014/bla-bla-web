@@ -7,15 +7,15 @@
   <div class="display-flex flex-wrap">
     {{#if this.authentication.isAdmin}}
       <LinkTo @route="authentication.admin" class="nes-btn is-warning mr-4">
-        Admin
+        {{t "nav.admin"}}
       </LinkTo>
     {{/if}}
     <LinkTo @route="authentication.home" class="nes-btn is-warning mr-4">
-      Home
+      {{t "nav.home"}}
     </LinkTo>
     <LinkTo @route="authentication.create-room">
       <span class="nes-btn is-warning mr-4">
-        Create a room
+        {{t "nav.create_a_room"}}
       </span>
     </LinkTo>
     {{yield}}
@@ -33,20 +33,13 @@
       </dropdown.trigger>
       <dropdown.content>
         <dropdown.item>
-          <LinkTo
-            @route="authentication.settings"
-            class="nes-btn"
-          >
-            Settings
+          <LinkTo @route="authentication.settings" class="nes-btn">
+            {{t "nav.settings"}}
           </LinkTo>
         </dropdown.item>
         <dropdown.item>
-          <button
-            type="button"
-            class="nes-btn"
-            {{on "click" this.logout}}
-          >
-            Logout
+          <button type="button" class="nes-btn" {{on "click" this.logout}}>
+            {{t "nav.logout"}}
           </button>
         </dropdown.item>
       </dropdown.content>

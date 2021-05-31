@@ -1,55 +1,55 @@
 <Layout as |layout|>
   <layout.body>
     {{#if (eq this.currentState this.state.login)}}
-        <img src="/assets/images/logo.png" alt="bla bla" />
+      <img src="/assets/images/logo.png" alt="bla bla" />
       <div class="nes-container with-title">
         <p class="title">
-          Login to see our secret world
+          {{t "login.title"}}
         </p>
         <div class="nes-field mb-4">
           <label for="user-name">
-            Username
+            {{t "login.username"}}
           </label>
           <Input
             @type="text"
             @id="user-name"
             @value={{this.username}}
             class="nes-input"
-            placeholder="Enter your user name, e.g. Sean"
+            placeholder={{t "login.username_placeholder"}}
           />
         </div>
         <div class="nes-field mb-4">
           <label for="password">
-            Password
+            {{t "login.password"}}
           </label>
           <Input
             @type="password"
             @id="password"
             @value={{this.password}}
             class="nes-input"
-            placeholder="password"
+            placeholder={{t "login.password"}}
           />
           {{#if this.isResetPasswordSucceed}}
             <p class="nes-text is-success">
-              An email is sent to reset your password
+              {{t "login.send_email"}}
             </p>
           {{else}}
             <a href="#" {{on "click" (set this "isShowResetPassword" true)}}>
-              Forget password?
+              {{t "login.forget_password"}}
             </a>
           {{/if}}
         </div>
         {{#if this.isShowResetPassword}}
           <div class="nes-field mb-4">
             <label for="user-email">
-              Enter the registered email to reset password
+              {{t "login.enter_email"}}
             </label>
             <Input
               @type="email"
               @id="user-email"
               @value={{this.email}}
               class="nes-input"
-              placeholder="email"
+              placeholder={{t "login.email"}}
             />
           </div>
         {{/if}}
@@ -62,7 +62,7 @@
               disabled={{this.isResetPasswordBtnDisabled}}
               {{on "click" this.resetPassword}}
             >
-              Reset Password
+              {{t "login.reset_password"}}
             </button>
           {{else}}
             <button
@@ -72,12 +72,12 @@
               disabled={{this.isLoginBtnDisabled}}
               {{on "click" this.login}}
             >
-              Login
+              {{t "login.login"}}
             </button>
           {{/if}}
           <LinkTo @route="register">
             <span class="nes-btn is-success">
-              Register
+              {{t "login.register"}}
             </span>
           </LinkTo>
         </div>
@@ -85,7 +85,7 @@
     {{else if (eq this.currentState this.state.error)}}
       <div class="nes-container with-title">
         <p class="title">
-          Login error
+          {{t "login.login_error"}}
         </p>
         <p class="nes-text is-error">
           {{this.errorMessage}}
@@ -95,7 +95,7 @@
           class="nes-btn is-primary"
           {{on "click" this.reset}}
         >
-          Try again
+          {{t "login.try_again"}}
         </button>
       </div>
     {{/if}}

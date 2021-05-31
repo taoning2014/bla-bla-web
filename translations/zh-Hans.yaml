@@ -1,0 +1,83 @@
+login:
+  title: 登录吧，你会发现很多有趣的灵魂
+  username: 用户名
+  username_placeholder: 输入你的用户名，比如：Sean
+  password: 密码
+  send_email: 我们已经将重置密码的邮件发送给你啦~
+  forget_password: 忘记密码？
+  email: 邮箱
+  enter_email: 输入你的邮箱地址来重置密码
+  reset_password: 重置密码
+  login: 登录
+  login_error: 登录出现错误
+  try_again: 再试一次
+  register: 注册
+register:
+  title: 让我们帮你准备好开启你奇妙旅程的通行证；）
+  select_avatar: 选择头像
+  username: 用户名
+  username_too_long: 用户名太长啦~
+  password: 密码
+  retype_password: 重新输入密码
+  email: 邮箱
+  invitation_code: 邀请码
+  email_to_get_code: 需要邀请码的话，请发邮件给阿涛 tningjs@outlook.com
+  sign_up: 注册
+  back: 后退
+  sign_up_error: 注册失败
+  try_again: 再试一次
+  invalid_code: 邀请码失效了~
+  invalid_code_content: 不好意思，这个邀请码好像失效了，你可以发邮件给阿涛 tningjs@outlook.com，他会重新发送一个新的给你
+nav:
+  admin: 管理员
+  home: 首页
+  create_a_room: 创建房间
+  settings: 设置
+  logout: 退出登录
+home:
+  welcome: 欢迎新朋友
+  title: 房间主题
+  title_content: 阿然说
+  description: 房间内容
+  description_content: 点击这里可以访问往期阿然说的精彩内容
+  host: 房间主人
+room:
+  room_title: 聊天室
+  title: 房间名称
+  description: 房间描述
+  welcome: 欢迎新朋友
+  loading: 数据读取中
+  loading_content: 我们正在为你准备房间，这可能需要十几秒钟时间的等待时间
+  agora_fail: 声网连接失败
+  agora_fail_content: 声网连接失败
+  join_another_room: 加入另一个房间
+  leanCloud_fail: Leancloud 连接失败
+  leanCloud_fail_content: Leancloud 连接失败
+  api_server_fail: API 服务器连接失败
+  api_server_fail_content: API 服务器连接失败
+  room_is_closed: 房间已经被关闭了
+  room_close_success: 房间已经成功关闭
+  room_close_success_by_admin: 这间房间已经被它的主人关闭了
+  room_ready: 房间准备就绪
+  room_ready_content: 你现在可以加入房间和小伙伴们聊天啦~
+  join: 加入
+  poor_network: 网络信号不好
+  host: host
+  unhost: unhost
+  audience: 观众
+  send: 发送
+  undo: ✋🏻撤销
+  raise: ✋🏻举手
+  mute: 静音
+  unmute: 开启话筒
+  discuss: 信息
+  close: 关闭房间
+  leave: 离开
+share:
+  share: 分享
+  link_copied: 成功复制到粘贴板
+  copy_share: 复制并分享
+  go_to_the_room: 进入聊天室
+message:
+  message: 发言
+  no_message: 没有人发言

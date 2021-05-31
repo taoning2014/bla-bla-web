@@ -1,6 +1,6 @@
 <div class="nes-container with-title">
   <p class="title">
-    Share
+    {{t "share.share"}}
   </p>
   <textarea
     id="textarea_field"
@@ -11,7 +11,7 @@
   ></textarea>
   {{#if this.isCopyLinkSucceed}}
     <p class="nes-text is-primary">
-      Link copied
+      {{t "share.link_copied"}}
     </p>
   {{/if}}
   {{#if this.isCopyLinkFail}}
@@ -25,12 +25,12 @@
       class="nes-btn is-success m-0"
       {{on "click" this.copyLink}}
     >
-      Copy & Share
+      {{t "share.copy_share"}}
     </button>
     {{#unless @hideGoToRoom}}
       <LinkTo @route="authentication.room" @model={{@roomId}}>
         <span class="nes-btn is-success m-0">
-          Go to the room
+          {{t "share.go_to_the_room"}}
         </span>
       </LinkTo>
     {{/unless}}

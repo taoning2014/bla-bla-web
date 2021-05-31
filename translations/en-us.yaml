@@ -1,12 +1,83 @@
-i18n:
-  hello_world: Hello World!
-  start_room: + Start a room
-  let_us_go: 🎉 Let's go
-  start_new_room_title: Start new room
-  start_new_room_content: Labore repellendus quia doloremque iure. Sed reprehenderit molestiae in. Vero dignissimos accusantium illo nulla voluptatem reiciendis rerum odio.
-  no_room: No available room
-  not_find_room: We didn’t find any rooms.
-  open: Open
-  social: Social
-  closed: Closed
-
+login:
+  title: Login to see our secret world
+  username: Username
+  username_placeholder: Enter your user name, e.g. Sean
+  password: Password
+  send_email: An email is sent to reset your password
+  forget_password: Forget password?
+  email: Email
+  enter_email: Enter the registered email to reset password
+  reset_password: Reset Password
+  login: Login
+  login_error: Login error
+  try_again: Try again
+  register: Register
+register:
+  title: Let's get your passport ready ;)
+  select_avatar: Select your avatar
+  username: Username
+  username_too_long: Username too long, it should be less than 8 chars
+  password: Password
+  retype_password: Retype password
+  email: Email
+  invitation_code: Invitation code
+  email_to_get_code: Email tningjs@outlook.com to get a code
+  sign_up: Sign up
+  back: Back
+  sign_up_error: Sign up error
+  try_again: Try Again
+  invalid_code: Invalid Invite Code
+  invalid_code_content: Sorry, the Invite Code is invalid. Please get a new one. You can reach out to us at tningjs@outlook.com to get a valid code
+nav:
+  admin: Admin
+  home: Home
+  create_a_room: Create a room
+  settings: Settings
+  logout: Logout
+home:
+  welcome: Welcome new friends
+  title: Title
+  title_content: Talk With Michael
+  description: Description
+  description_content: Click here to visit our past episodes of selective content
+  host: Host
+room:
+  room_title: Room
+  title: Title
+  description: Description
+  welcome: Welcome new friends
+  loading: Loading data
+  loading_content: We are preparing the room for you, it will be ready in a moment
+  agora_fail: Agora Connection Fail
+  agora_fail_content: Sorry, there was a problem connecting to Agora.
+  join_another_room: Join Another Room
+  leanCloud_fail: LeanCloud Fail
+  leanCloud_fail_content: Sorry, there is a problem when we try connect to LeanCloud. Likely because the room is destroyed.
+  api_server_fail: API Server Fail
+  api_server_fail_content: Sorry, there is a problem when we try connect to API server, likely because the API server is down.
+  room_is_closed: Room is closed
+  room_close_success: The room is closed successfully
+  room_close_success_by_admin: The room is closed by the admin
+  room_ready: Room is ready
+  room_ready_content: Join the room to start chat with friends
+  join: Join
+  poor_network: Poor network connection
+  host: Host
+  unhost: Unhost
+  audience: Audience
+  send: Send
+  undo: ✋🏻Undo
+  raise: ✋🏻Raise
+  mute: Mute
+  unmute: Unmute
+  discuss: Discuss
+  close: Close
+  leave: Leave
+share:
+  share: Share
+  link_copied: Link copied
+  copy_share: Copy & Share
+  go_to_the_room: Go to the room
+message:
+  message: Message
+  no_message: No one post any message yet

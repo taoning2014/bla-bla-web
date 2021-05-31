@@ -8,7 +8,7 @@
       💡
     </button>
   </layout.nav>
-  <layout.head @talk="Welcome new friends"/>
+  <layout.head @talk={{t "home.welcome"}}/>
   <layout.body class="mb-home">
     <a
       class="nes-container is-rounded mb-4"
@@ -17,17 +17,17 @@
       rel="noreferrer noopener"
     >
       <p class="nes-text is-primary">
-        Title: Talk With Michael
+        {{t "home.title"}}: {{t "home.title_content"}}
       </p>
       <p>
-        Description: Click here to visit our past episodes of selective content
+        {{t "home.description"}}: {{t "home.description_content"}}
       </p>
       <Avatar
         @character="tight-fisted"
         @username="Michael"
       >
         <span class="nes-text is-success">
-          Host
+          {{t "home.host"}}
         </span>
       </Avatar>
     </a>

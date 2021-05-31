@@ -5,12 +5,12 @@
     <:default>
       <div class="nes-container with-title mb-4">
         <p class="title">
-          Room
+          {{t "room.room_title"}}
         </p>
         <p>
           <span class="nes-badge">
             <span class="is-error">
-              Title
+              {{t "room.title"}}
             </span>
           </span>
           {{this.model.title}}
@@ -18,37 +18,37 @@
         <p>
           <span class="nes-badge">
             <span class="is-warning">
-              Description
+              {{t "room.description"}}
             </span>
           </span>
           {{#if this.model.description.description}}
             {{this.model.description.description}}
           {{else}}
-            Welcome new friends<i class="nes-icon heart"></i>
+            {{t "room.welcome"}}<i class="nes-icon heart"></i>
           {{/if}}
         </p>
       </div>
       {{#if (eq this.currentState this.state.LOADING)}}
         <div class="nes-container with-title mb-4">
           <p class="title">
-            Loading data
+            {{t "room.loading"}}
           </p>
           <p class="nes-text is-primary">
-            We are preparing the room for you, it will be ready in a moment
+            {{t "room.loading_content"}}
           </p>
         </div>
       {{else if (eq this.currentState this.state.ERROR.AGORA_CONNECT_FAIL)}}
         <div class="nes-container with-title mb-4">
           <p class="title">
-            Agora Connection Fail
+            {{t "room.agora_fail"}}
           </p>
           <p class="nes-text is-error">
-            Sorry, there was a problem connecting to Agora.
+            {{t "room.agora_fail_content"}}
           </p>
           <div class="display-flex">
             <LinkTo @route="authentication.home">
               <span class="nes-btn is-success">
-                Join Another Room
+                {{t "room.join_another_room"}}
               </span>
             </LinkTo>
           </div>
@@ -56,16 +56,15 @@
       {{else if (eq this.currentState this.state.ERROR.LEAN_CLOUD)}}
         <div class="nes-container with-title mb-4">
           <p class="title">
-            LeanCloud Fail
+            {{t "room.leanCloud_fail"}}
           </p>
           <p class="nes-text is-error">
-            Sorry, there is a problem when we try connect to LeanCloud. Likely
-          because the room is destroyed.
+            {{t "room.leanCloud_fail_content"}}
           </p>
           <div class="display-flex">
             <LinkTo @route="authentication.home">
               <span class="nes-btn is-success">
-                Join Another Room
+                {{t "room.join_another_room"}}
               </span>
             </LinkTo>
           </div>
@@ -73,16 +72,15 @@
       {{else if (eq this.currentState this.state.ERROR.API_SERVER)}}
         <div class="nes-container with-title mb-4">
           <p class="title">
-            API Server Fail
+            {{t "room.api_server_fail"}}
           </p>
           <p class="nes-text is-error">
-            Sorry, there is a problem when we try connect to API server, likely
-          because the API server is down.
+            {{t "room.leanCloud_fail_content"}}
           </p>
           <div class="display-flex">
             <LinkTo @route="authentication.home">
               <span class="nes-btn is-success">
-                Join Another Room
+                {{t "room.join_another_room"}}
               </span>
             </LinkTo>
           </div>
@@ -90,19 +88,19 @@
       {{else if (eq this.currentState this.state.CLOSED)}}
         <div class="nes-container with-title mb-4">
           <p class="title">
-            Room is closed
+            {{t "room.room_is_closed"}}
           </p>
           <p class="nes-text is-error">
             {{#if (eq this.me.role this.userRole.ADMIN)}}
-              The room is closed successfully
+              {{t "room.room_close_success"}}
             {{else}}
-              The room is closed by the admin
+              {{t "room.room_close_success_by_admin"}}
             {{/if}}
           </p>
           <div class="display-flex">
             <LinkTo @route="authentication.home">
               <span class="nes-btn is-success">
-                Join Another Room
+                {{t "room.join_another_room"}}
               </span>
             </LinkTo>
           </div>
@@ -110,10 +108,10 @@
       {{else if (eq this.currentState this.state.READY)}}
         <div class="nes-container with-title mb-4">
           <p class="title">
-            Room is ready
+            {{t "room.room_ready"}}
           </p>
           <p class="nes-text is-primary">
-            Join the room to start chat with friends
+            {{t "room.room_ready_content"}}
           </p>
           <div class="display-flex justify-space-between">
             <button
@@ -121,20 +119,20 @@
               class="nes-btn is-primary"
               {{on "click" (set this "currentState" this.state.LOADED)}}
             >
-              Join
+              {{t "room.join"}}
             </button>
           </div>
         </div>
       {{else if (eq this.currentState this.state.LOADED)}}
         {{#if this.isShowPoorNetworkQuality}}
           <p class="nes-text is-error">
-            Poor network connection
+            {{t "room.poor_network"}}
             <span class="spinner"></span>
           </p>
         {{/if}}
         <div class="nes-container with-title mb-4">
           <p class="title">
-            Host
+            {{t "room.host"}}
           </p>
           <div>
             {{#each this.hosts as |host|}}
@@ -151,7 +149,7 @@
                       type="button"
                       {{on "click" (fn this.toggleHost host.userId)}}
                     >
-                      Unhost
+                      {{t "room.unhost"}}
                     </button>
                   {{/unless}}
                 {{/if}}
@@ -161,7 +159,7 @@
         </div>
         <div class="nes-container with-title mb-4">
           <p class="title">
-            Audience
+            {{t "room.audience"}}
           </p>
           <div>
             {{#each this.guests as |guest|}}
@@ -178,7 +176,7 @@
                       type="button"
                       {{on "click" (fn this.toggleHost guest.userId)}}
                     >
-                      Host
+                      {{t "room.host"}}
                     </button>
                   {{/if}}
                 </div>
@@ -193,7 +191,7 @@
     </:default>
     <:bottom>
       {{#if (eq this.currentState this.state.LOADED)}}
-        <div class="bottom-nav nes-container">
+        <div class="bottom-nav nes-container pv-3">
           <div
             class="bottom-nav-content display-flex justify-space-between align-items-center flex-wrap"
           >
@@ -205,7 +203,7 @@
                   @value={{this.message}}
                 />
                 <button class="nes-btn is-primary mr-4" type="submit">
-                  Send
+                  {{t "room.send"}}
                 </button>
                 <i
                   role="button"
@@ -225,8 +223,8 @@
                   >
                     {{if
                       (eq this.me.state this.userState.RAISE_HAND)
-                      "✋Undo"
-                      "✋Raise"
+                      (t "room.undo")
+                      (t "room.raise")
                     }}
                   </button>
                 {{/if}}
@@ -252,8 +250,8 @@
                       <span>
                         {{if
                           (eq this.me.state this.userState.MUTED)
-                          "Unmute"
-                          "Mute"
+                          (t "room.unmute")
+                          (t "room.mute")
                         }}
                       </span>
                     </div>
@@ -271,7 +269,7 @@
                       alt="muted"
                     />
                     <span>
-                      Discuss
+                      {{t "room.discuss"}}
                     </span>
                   </div>
                 </button>
@@ -296,7 +294,7 @@
                         alt="muted"
                       />
                       <span>
-                        Close
+                        {{t "room.close"}}
                       </span>
                     </div>
                   </button>
@@ -314,7 +312,7 @@
                       alt="muted"
                     />
                     <span>
-                      Leave
+                      {{t "room.leave"}}
                     </span>
                   </div>
                 </button>

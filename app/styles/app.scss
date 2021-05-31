@@ -84,3 +84,14 @@ samp {
   display: flex;
   align-items: center;
 }
+
+.mb-lang--zh-hans {
+  .mb-image-with-icon {
+    align-items: flex-end;
+    height: 18px;
+  }
+
+  .dropdown-container .nes-btn {
+    width: 80px;
+  }
+}

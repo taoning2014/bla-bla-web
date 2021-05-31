@@ -1,7 +1,7 @@
 <Layout as |layout|>
   <layout.body>
     {{#if (eq this.currentState this.state.login)}}
-      <img src="/assets/images/logo.png" alt="bla bla" />
+      <img src="/assets/images/logo.png" alt={{t "login.alt_str"}} />
       <div class="nes-container with-title">
         <p class="title">
           {{t "login.title"}}

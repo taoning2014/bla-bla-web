@@ -41,3 +41,7 @@ export const MESSAGE_PREFIXES = {
   MESSAGE: 'MESSAGE:',
   REACTION: 'REACTION:',
 };
+
+export const LOCALSTORAGE_KEYS = {
+  LANGUAGE: 'mb-language',
+};

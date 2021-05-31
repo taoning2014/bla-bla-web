@@ -1,4 +1,5 @@
 login:
+  alt_str: Bla bla
   title: Login to see our secret world
   username: Username
   username_placeholder: Enter your user name, e.g. Sean
@@ -28,6 +29,22 @@ register:
   try_again: Try Again
   invalid_code: Invalid Invite Code
   invalid_code_content: Sorry, the Invite Code is invalid. Please get a new one. You can reach out to us at tningjs@outlook.com to get a valid code
+application:
+  unmute: Unmute
+  mute: Mute
+  rejoin_room: Rejoin Room
+  leave: Leave
+admin:
+  generate_code: Generate invite code
+  generate_code_count: Number of invites to generate
+  incorrect_input: Incorrect input, please enter number between 1 and 100
+  list_code: List of generated invite code
+  code: code
+  copy: Copy📋
+  redeemed: Already redeemed
+  leancloud_error: Leancloud error
+  leancloud_error_content: Could not create new invitation code
+  back: Back to home
 nav:
   admin: Admin
   home: Home
@@ -41,6 +58,18 @@ home:
   description: Description
   description_content: Click here to visit our past episodes of selective content
   host: Host
+  show_modal: 💡
+  modal:
+    title_1: Hi dear friends :)
+    title_2: Our app has a new release for you today!
+    title_3: Here is what has been updated
+    feature_1: Redesign for room
+    feature_2: Instant message in the room
+    feature_3: Minimize current room, so that user can visit other routes while speaking or listening in the room
+    credits: Thank you, Lora Zhang and Sean Johnson for the fantastic redesign and implementation.
+    try: Try it out
+    version: Version
+    beta: Beta
 room:
   room_title: Room
   title: Title
@@ -78,6 +107,42 @@ share:
   link_copied: Link copied
   copy_share: Copy & Share
   go_to_the_room: Go to the room
+  not_able_to_copy: Your browser forbids text copying. Please select and copy the text in the box yourself.
 message:
   message: Message
   no_message: No one post any message yet
+create_room:
+  room_title: Create a new room
+  title: Title
+  optional: (optional)
+  description: description
+  is_scheduled: Is Scheduled Room?
+  error: Error happened when try to create a room
+  create: Create
+  try_again: Try again
+  no_access: Oops, Don't have access to create a room yet
+  verify_email_1: Please verify your email before you can create a room
+  verify_email_2: You can verify email on in the setting tab
+  verify_email: Verify email
+settings:
+  change_avatar: Change your avatar
+  update_information: Update your information
+  current_email: Current email
+  verified: verified
+  not_verified: not verified
+  email_sent: email sent
+  resend: resend verification
+  email: email
+  language_saved: Language saved, refresh your browser to load the new language
+  select_lang: Select your language
+  english: English
+  chinese: Chinese
+  controls: Controls
+  save: Save
+  change_saved: change saved
+  back_to_home: Back to home
+  error_happens: Error happens
+  error_happens_content: There are some error happened, the change is not saved
+reaction_box: reaction box
+scheduled_time: Scheduled Time
+questionnaire: 📝

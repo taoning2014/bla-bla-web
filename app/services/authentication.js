@@ -79,6 +79,10 @@ export default class AuthenticationService extends Service {
     return this.currentUser.get('emailVerified');
   }
 
+  get language() {
+    return this.currentUser.get('language');
+  }
+
   get isAdmin() {
     return this.currentUser.get('role') === 'admin';
   }
@@ -90,6 +94,11 @@ export default class AuthenticationService extends Service {
 
   async setEmail(email) {
     this.currentUser.setEmail(email);
+    await this.currentUser.save();
+  }
+
+  async setLanguage(lang) {
+    this.currentUser.set('language', lang);
     await this.currentUser.save();
   }
 

@@ -2,7 +2,7 @@
   class="layout-nav display-flex justify-space-between align-items-flex-end nes-container is-rounded is-dark m-0"
 >
   <LinkTo @route="authentication.home">
-    <img src="/assets/images/logo-small.png" height={{56}} alt="go to home" />
+    <img src="/assets/images/logo-small.png" height={{56}} alt={{t "settings.back_to_home"}} />
   </LinkTo>
   <div class="display-flex flex-wrap">
     {{#if this.authentication.isAdmin}}
@@ -25,7 +25,7 @@
       rel="noopener noreferrer"
       class="nes-btn is-primary mr-4"
     >
-      📝
+      {{t "questionnaire"}}
     </a>
     <Dropdown as |dropdown|>
       <dropdown.trigger>

@@ -4,7 +4,7 @@
     {{#if (eq this.currentState this.state.setting)}}
       <div class="nes-container with-title mb-4">
         <p class="title">
-          Change your avatar
+          {{t "settings.change_avatar"}}
         </p>
         <div
           class="display-flex justify-space-between align-items-flex-start flex-wrap mb-5"
@@ -15,32 +15,39 @@
           />
         </div>
       </div>
-
       <div class="nes-container with-title mb-4">
         <p class="title">
-          Update your information
+          {{t "settings.update_information"}}
         </p>
         <div class="nes-field mb-4">
           {{#if this.authentication.email}}
             <p>
-              <span>Current email:{{this.authentication.email}}</span>
+              <span>
+                {{t "settings.current_email"}}:
+                {{this.authentication.email}}
+              </span>
               {{#if this.authentication.emailVerified}}
-                <span class="nes-text is-success">verified</span>
+                <span class="nes-text is-success">
+                  {{t "settings.verified"}}
+                </span>
               {{else}}
-                <span class="nes-text is-warning">not verified</span>
+                <span class="nes-text is-warning">
+                  {{t "settings.not_verified"}}
+                </span>
                 {{#if this.isVerifyEmailSend}}
-                  <span>email sent</span>
+                  <span>
+                    {{t "settings.email_sent"}}
+                  </span>
                 {{else}}
-                  <button
-                    type="button"
-                    {{on "click" this.verifyEmail}}
-                  >resend verification</button>
+                  <button type="button" {{on "click" this.verifyEmail}}>
+                    {{t "settings.resend"}}
+                  </button>
                 {{/if}}
               {{/if}}
             </p>
           {{/if}}
           <label for="user-email">
-            email
+            {{t "settings.email"}}
           </label>
           <Input
             @type="email"
@@ -51,42 +58,72 @@
             placeholder="email"
           />
         </div>
+        <div class="nes-field mb-4">
+          {{#if this.isNewLangSaved}}
+            <p class="nes-text is-success">
+              {{t "settings.language_saved"}}
+            </p>
+          {{/if}}
+          <label for="select_language">
+            {{t "settings.select_lang"}}
+          </label>
+          <div class="nes-select">
+            <select
+              id="select_language"
+              {{on "change" this.updateLanguage value="target.value"}}
+            >
+              <option
+                value="en-us"
+                selected={{if (eq this.language "en-us") true}}
+              >
+                {{t "settings.english"}}
+              </option>
+              <option
+                value="zh-hans"
+                selected={{if (eq this.language "zh-hans") true}}
+              >
+                {{t "settings.chinese"}}
+              </option>
+            </select>
+          </div>
+        </div>
       </div>
-
       <div class="nes-container with-title">
         <p class="title">
-          Controls
+          {{t "settings.controls"}}
         </p>
         <div class="display-flex justify-space-between">
           <div>
             <button
               type="button"
-              class="nes-btn is-primary m-0
+              class="nes-btn is-primary m-en-us
                 {{if this.isSaveBtnDisabled " is-disabled"}}"
               disabled={{this.isSaveBtnDisabled}}
               {{on "click" this.save}}
             >
-              Save
+              {{t "settings.save"}}
             </button>
             {{#if this.isSaved}}
-              <span class="nes-text is-success">change saved</span>
+              <span class="nes-text is-success">
+                {{t "settings.change_saved"}}
+              </span>
             {{/if}}
           </div>
           <LinkTo @route="authentication.home" class="nes-btn is-primary">
-            Back to home
+            {{t "settings.back_to_home"}}
           </LinkTo>
         </div>
       </div>
     {{else if (eq this.currentState this.state.error)}}
       <div class="nes-container with-title">
         <p class="title">
-          Error happens
+          {{t "settings.error_happens"}}
         </p>
         <p class="nes-text is-error">
-          There are some error happened, the change is not saved
+          {{t "settings.error_happens_content"}}
         </p>
         <LinkTo @route="authentication.home" class="nes-btn is-primary">
-          Back to home
+          {{t "settings.back_to_home"}}
         </LinkTo>
       </div>
     {{/if}}

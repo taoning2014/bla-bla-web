@@ -5,7 +5,7 @@
       class="nes-btn is-primary mr-4"
       {{on "click" (set this "isShowReleaseModal" true)}}
     >
-      💡
+      {{t "home.show_modal"}}
     </button>
   </layout.nav>
   <layout.head @talk={{t "home.welcome"}}/>
@@ -40,31 +40,30 @@
   <ModalDialog @translucentOverlay={{true}}>
     <div class="p-4">
       <p class="nes-text">
-        Hi dear friends :)
+        {{t "home.modal.title_1"}}
       </p>
       <p>
-        Our app has a new release for you today!
+        {{t "home.modal.title_2"}}
       </p>
       <p>
-        Here is what has been updated:
+        {{t "home.modal.title_3"}}:
       </p>
       <div class="lists">
         <ul class="nes-list is-circle">
-          <li>
-            Feed now lists current active rooms and scheduled rooms.
+          <li class="mb-2">
+            {{t "home.modal.feature_1"}}
+          </li>
+          <li class="mb-2">
+            {{t "home.modal.feature_2"}}
           </li>
           <li>
-            Users can update their avatar and verify email on the setting page.
-          </li>
-          <li>
-            Invitation code, the new user will need to enter an invitation code.
+            {{t "home.modal.feature_3"}}
           </li>
         </ul>
       </div>
       <div class="mb-4">
         <p class="nes-text is-error">
-          Thank you, Sean Johnson, for adding tons of useful features with us.
-          Sean, you are our superhero.
+          {{t "home.modal.credits"}}
           <i class="nes-icon heart"></i>
         </p>
         <i class="nes-mario"></i>
@@ -77,13 +76,13 @@
         class="nes-btn is-success"
         {{on "click" this.closeFeatureModal}}
       >
-        Try it out
+        {{t "home.modal.try"}}
       </button>
     </div>
     <span class="mb-app-version">
-      Version:
+      {{t "home.modal.version"}}:
       {{app-version versionOnly=true}}
-      Beta
+      {{t "home.modal.beta"}}
     </span>
   </ModalDialog>
 {{/if}}

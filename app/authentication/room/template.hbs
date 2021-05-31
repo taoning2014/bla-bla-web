@@ -245,7 +245,11 @@
                       <img
                         class="mr-1"
                         src="/assets/icons/unmute-icon.png"
-                        alt="muted"
+                        alt={{if
+                          (eq this.me.state this.userState.MUTED)
+                          (t "room.unmute")
+                          (t "room.mute")
+                        }}
                       />
                       <span>
                         {{if
@@ -266,7 +270,7 @@
                     <img
                       class="mr-1"
                       src="/assets/icons/discuss-icon.png"
-                      alt="muted"
+                      alt={{t "room.discuss"}}
                     />
                     <span>
                       {{t "room.discuss"}}
@@ -291,7 +295,7 @@
                       <img
                         class="mr-1"
                         src="/assets/icons/close-icon.png"
-                        alt="muted"
+                        alt={{t "room.close"}}
                       />
                       <span>
                         {{t "room.close"}}
@@ -309,7 +313,7 @@
                     <img
                       class="mr-1"
                       src="/assets/icons/leave-icon.png"
-                      alt="muted"
+                      alt={{t "room.leave"}}
                     />
                     <span>
                       {{t "room.leave"}}

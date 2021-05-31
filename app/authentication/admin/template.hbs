@@ -5,11 +5,11 @@
     {{#if (eq this.currentState this.state.admin)}}
       <div class="nes-container with-title mv-4">
         <p class="title">
-          Generate invite code
+          {{t "admin.generate_code"}}
         </p>
         <div class="nes-field mb-4">
           <label for="number-of-invite-code">
-            Number of invites to generate
+            {{t "admin.generate_code_count"}}
           </label>
           <Input
             @type="number"
@@ -20,8 +20,7 @@
             placeholder="enter the number between 1 to 100"
           />
           {{#if this.inviteCodeInputError}}
-            <p class="nes-text is-error">Incorrect input, please enter number
-              between 1 and 100</p>
+            <p class="nes-text is-error">{{t "admin.incorrect_input"}}</p>
           {{/if}}
         </div>
         {{#if this.inviteCode}}
@@ -41,19 +40,19 @@
             disabled={{this.isGenerateBtnDisabled}}
             {{on "click" this.createInviteCode}}
           >
-            Generate invite code
+            {{t "admin.generate_code"}}
           </button>
         </div>
       </div>
 
       <div class="nes-container with-title mv-4">
-        <p class="title">List of generated invite code</p>
+        <p class="title">{{t "admin.list_code"}}</p>
         <div class="lists">
           <ul class="nes-list is-disc">
             {{#each this.unredeemedInviteCodes as |code|}}
               <li>
-                code: <input type="text" id="code-{{code.inviteCode}}" value={{code.inviteCode}} />
-                <button {{on "click" (fn this.copyCode code.inviteCode)}}>Copy📋</button>
+                {{t "admin.code"}}: <input type="text" id="code-{{code.inviteCode}}" value={{code.inviteCode}} />
+                <button type="button" {{on "click" (fn this.copyCode code.inviteCode)}}>{{t "admin.copy"}}</button>
               </li>
             {{/each}}
           </ul>
@@ -61,7 +60,7 @@
       </div>
 
       <div class="nes-container with-title mv-4">
-        <p class="title">Already redeemed</p>
+        <p class="title">{{t "admin.redeemed"}}</p>
         <div class="lists">
           <ul class="nes-list is-disc">
             {{#each this.redeemedInviteCodes as |code|}}
@@ -75,13 +74,13 @@
     {{else if (eq this.currentState this.state.error)}}
       <div class="nes-container with-title">
         <p class="title">
-          Leancloud error
+          {{t "admin.leancloud_error"}}
         </p>
         <p class="nes-text is-error">
-          Could not create new invitation code
+          {{t "admin.leancloud_error_content"}}
         </p>
         <LinkTo @route="authentication.home" class="nes-btn is-primary">
-          Back to home
+          {{t "admin.back"}}
         </LinkTo>
       </div>
     {{/if}}

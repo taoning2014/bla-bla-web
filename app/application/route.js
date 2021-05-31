@@ -1,13 +1,22 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { LOCALSTORAGE_KEYS } from 'metal-bat-web/utils/constants';
 
 export default class ApplicationRoute extends Route {
   @service intl;
 
   beforeModel() {
-    // Use to test different language
-    // this.intl.setLocale(['zh-Hans']);
-    // this.intl.setLocale(['en-us']);
+    this.lang = localStorage.getItem(LOCALSTORAGE_KEYS.LANGUAGE)
+    const isLanguageSupported = this.intl.get('locales').includes(this.lang);
+    if (isLanguageSupported) {
+      this.intl.setLocale([this.lang]);
+    }
+  }
+
+  setupController(controller, model) {
+    super.setupController(controller, model);
+
+    controller.lang = this.lang;
   }
 
 }

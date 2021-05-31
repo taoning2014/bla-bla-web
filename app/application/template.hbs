@@ -1,4 +1,6 @@
-{{outlet}}
+<div class={{if (eq this.lang "zh-hans") "mb-lang--zh-hans"}}>
+  {{outlet}}
+</div>
 {{#if this.showBottomNav}}
   <nav class="bottom-nav nes-container pv-3">
     <div
@@ -12,7 +14,7 @@
               class="nes-btn is-warning"
               {{on "click" this.unmute}}
             >
-              Unmute
+              {{t "application.unmute"}}
             </button>
           {{else}}
             <button
@@ -20,13 +22,13 @@
               class="nes-btn is-warning"
               {{on "click" this.mute}}
             >
-              Mute
+              {{t "application.mute"}}
             </button>
           {{/if}}
         {{/if}}
         <LinkTo @route="authentication.room" @model={{this.call.roomId}}>
           <button type="button" class="nes-btn is-primary">
-            Rejoin Room
+            {{t "application.rejoin_room"}}
           </button>
         </LinkTo>
       </div>
@@ -35,7 +37,7 @@
         class="nes-btn"
         {{on "click" this.endCall}}
       >
-        Leave
+        {{t "application.leave"}}
       </button>
     </div>
   </nav>

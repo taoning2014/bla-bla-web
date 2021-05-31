@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { getOwner } from '@ember/application';
 
 export default class LayoutNavComponent extends Component {
   @service authentication;
@@ -14,6 +15,9 @@ export default class LayoutNavComponent extends Component {
 
   @action
   logout() {
+    const owner = getOwner(this);
+    const roomController = owner.lookup('controller:authentication.room');
+    roomController.disconnectUser();
     this.authentication.logOut();
     this.router.transitionTo('login');
   }

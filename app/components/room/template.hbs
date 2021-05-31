@@ -1,4 +1,4 @@
-<LinkTo @class="nes-container is-rounded mb-4" @route="authentication.room" @model={{@room.objectId}}>
+<LinkTo @class="nes-container is-rounded mb-4 link-without-style" @route="authentication.room" @model={{@room.objectId}}>
   {{#if @room.scheduledTime}}
     <p class="nes-text is-warning">{{t "scheduled_time"}}: {{display-date @room.scheduledTime}}</p>
   {{/if}}

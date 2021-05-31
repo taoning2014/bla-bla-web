@@ -18,7 +18,13 @@
         {{t "nav.create_a_room"}}
       </span>
     </LinkTo>
-    {{yield}}
+    <button
+      type="button"
+      class="nes-btn is-primary mr-4"
+      {{on "click" @showReleaseModal}}
+    >
+      {{t "home.show_modal"}}
+    </button>
     <a
       href="https://www.wenjuan.com/s/UZBZJv3abt/?sr=wenjuan_mini_app&sy=2"
       target="_blank"

@@ -662,3 +662,13 @@
 a {
   text-decoration: none !important;
 }
+
+a.link-without-style {
+  &,
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+    color: inherit;
+  }
+}

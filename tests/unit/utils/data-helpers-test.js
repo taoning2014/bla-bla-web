@@ -1,4 +1,4 @@
-import dataHelpers from 'metal-bat-web/utils/data-helpers';
+import dataHelpers from 'bla-bla-web/utils/data-helpers';
 import { module, test } from 'qunit';
 
 module('Unit | Utility | data-helpers', function() {

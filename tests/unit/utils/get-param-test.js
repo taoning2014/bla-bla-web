@@ -1,4 +1,4 @@
-import getParam from 'metal-bat-web/utils/get-param';
+import getParam from 'bla-bla-web/utils/get-param';
 import { module, skip } from 'qunit';
 
 module('Unit | Utility | get-param', function() {

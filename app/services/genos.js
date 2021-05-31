@@ -4,7 +4,7 @@ import { assert } from '@ember/debug';
 import {
   FEATURE_LIST,
   LEAN_CLOUD_ERROR_CODE,
-} from 'metal-bat-web/utils/constants';
+} from 'bla-bla-web/utils/constants';
 import { underscore } from '@ember/string';
 import { isPresent } from '@ember/utils';
 export default class GenosService extends Service {

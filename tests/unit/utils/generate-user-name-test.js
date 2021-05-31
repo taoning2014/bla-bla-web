@@ -1,4 +1,4 @@
-import generateUserName from 'metal-bat-web/utils/generate-user-name';
+import generateUserName from 'bla-bla-web/utils/generate-user-name';
 import { module, skip } from 'qunit';
 
 module('Unit | Utility | generate-user-name', function() {

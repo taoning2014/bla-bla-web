@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { LOCALSTORAGE_KEYS } from 'metal-bat-web/utils/constants';
+import { LOCALSTORAGE_KEYS } from 'bla-bla-web/utils/constants';
 
 const STATE = {
   setting: 'setting',

@@ -1,7 +1,7 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import getBaseUrl from 'metal-bat-web/utils/get-base-url';
+import getBaseUrl from 'bla-bla-web/utils/get-base-url';
 
 export default class ShareComponent extends Component {
   @tracked isCopyLinkFail;

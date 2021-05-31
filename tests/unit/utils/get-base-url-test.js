@@ -1,4 +1,4 @@
-import getBaseUrl from 'metal-bat-web/utils/get-base-url';
+import getBaseUrl from 'bla-bla-web/utils/get-base-url';
 import { module, test } from 'qunit';
 
 module('Unit | Utility | get-base-url', function() {

@@ -7,11 +7,11 @@ import {
   ROOM_STATE,
   USER_ROLE,
   USER_STATE,
-} from 'metal-bat-web/utils/constants';
+} from 'bla-bla-web/utils/constants';
 import {
   AVModelToTrackedObject,
   handleStreamMessage,
-} from 'metal-bat-web/utils/data-helpers';
+} from 'bla-bla-web/utils/data-helpers';
 import { TrackedArray, TrackedMap } from 'tracked-built-ins';
 
 export default class AuthenticationRoomController extends Controller {

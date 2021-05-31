@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { ONE_HOUR, ONE_DAY } from 'metal-bat-web/utils/constants';
+import { ONE_HOUR, ONE_DAY } from 'bla-bla-web/utils/constants';
 
 const STATE = {
   createRoom: 'createRoom',

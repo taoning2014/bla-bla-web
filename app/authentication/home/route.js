@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
-import { FEATURE_LIST } from 'metal-bat-web/utils/constants';
+import { FEATURE_LIST } from 'bla-bla-web/utils/constants';
 import { inject as service } from '@ember/service';
-import { ONE_HOUR } from 'metal-bat-web/utils/constants';
+import { ONE_HOUR } from 'bla-bla-web/utils/constants';
 
 export default class AuthenticationHomeRoute extends Route {
   @service genos;
@@ -19,7 +19,7 @@ export default class AuthenticationHomeRoute extends Route {
      * ~Refer: https://docs.leancloud.app/leanengine_cloudfunction_guide-node.html#hash-108242322~
      *
      * Update: we should NOT destroy rooms, instead, we can leverage it for tracking.
-     * Here is a [WIP Tracking RFC](https://github.com/taoning2014/metal-bat-web/issues/28)
+     * Here is a [WIP Tracking RFC](https://github.com/taoning2014/bla-bla-web/issues/28)
      */
     const roomQuery = new this.liveQuery.AV.Query('Room').greaterThanOrEqualTo(
       'createdAt',

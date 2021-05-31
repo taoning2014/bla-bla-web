@@ -1,10 +1,10 @@
 import Service from '@ember/service';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 import { inject as service } from '@ember/service';
-import ENV from 'metal-bat-web/config/environment';
+import ENV from 'bla-bla-web/config/environment';
 import { tracked } from '@glimmer/tracking';
 import { assert } from '@ember/debug';
-import { USER_ROLE } from 'metal-bat-web/utils/constants';
+import { USER_ROLE } from 'bla-bla-web/utils/constants';
 
 const LOG_LEVEL = {
   DEBUG: 0,

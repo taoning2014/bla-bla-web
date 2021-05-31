@@ -2,7 +2,7 @@
 
 module.exports = function (environment) {
   let ENV = {
-    modulePrefix: 'metal-bat-web',
+    modulePrefix: 'bla-bla-web',
     environment,
     rootURL: '/',
     locationType: 'auto',
@@ -23,14 +23,14 @@ module.exports = function (environment) {
     },
 
     AGORA_ENV: {
-      APP_ID: '',
+      APP_ID: 'APP_ID',
     },
 
     LEANCLOUD_ENV: {
-      APP_ID: '',
-      APP_KEY: '',
+      APP_ID: 'APP_ID-MdYXbMMI',
+      APP_KEY: 'APP_KEY',
     },
-  };
+  }
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;

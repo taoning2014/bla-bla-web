@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { LOCALSTORAGE_KEYS } from 'metal-bat-web/utils/constants';
+import { LOCALSTORAGE_KEYS } from 'bla-bla-web/utils/constants';
 
 export default class ApplicationRoute extends Route {
   @service intl;

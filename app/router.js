@@ -1,5 +1,5 @@
 import EmberRouter from '@ember/routing/router';
-import config from 'metal-bat-web/config/environment';
+import config from 'bla-bla-web/config/environment';
 
 export default class Router extends EmberRouter {
   location = config.locationType;

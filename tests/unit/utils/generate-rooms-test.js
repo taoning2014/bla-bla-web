@@ -1,4 +1,4 @@
-import generateRooms from 'metal-bat-web/utils/generate-rooms';
+import generateRooms from 'bla-bla-web/utils/generate-rooms';
 import { module, test } from 'qunit';
 
 module('Unit | Utility | generate-rooms', function () {

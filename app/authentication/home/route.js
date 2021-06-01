@@ -30,13 +30,19 @@ export default class AuthenticationHomeRoute extends Route {
       'Room'
     ).greaterThanOrEqualTo('scheduledTime', Date.now() - 2 * ONE_HOUR);
 
-    const rooms = await this.liveQuery.AV.Query.or(
-      roomQuery,
-      scheduledRoomQuery
-    )
-      .addDescending('scheduledTime')
-      .addDescending('createdAt')
-      .find();
+    // If user run this repo first time, the following class does not exist and Leancould will throw error
+    let rooms;
+    try {
+      rooms = await this.liveQuery.AV.Query.or(
+        roomQuery,
+        scheduledRoomQuery
+      )
+        .addDescending('scheduledTime')
+        .addDescending('createdAt')
+        .find();
+    } catch(e) {
+      rooms = [];
+    }
 
     return {
       rooms: rooms.map((room) => room.toJSON()),

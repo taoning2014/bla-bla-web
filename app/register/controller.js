@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { INVITATION_CODE_LENGTH } from 'bla-bla-web/utils/constants';
 
 const STATE = {
   signUp: 'signUp',
@@ -25,7 +24,7 @@ export default class RegisterController extends Controller {
   @tracked isEnteredSamePassword;
   @tracked inviteCode = '';
   @tracked usernameExceedLimit;
-  @tracked selectAvatar = 'nes-mario';
+  @tracked selectAvatar = 'big-stinky-pete';
 
   get isSignUpBtnDisabled() {
     const isSignUpBtnEnabled =
@@ -34,28 +33,29 @@ export default class RegisterController extends Controller {
       !!this.retypePassword &&
       !!this.email &&
       !this.usernameExceedLimit &&
-      this.isEnteredSamePassword &&
-      this.inviteCode.length === INVITATION_CODE_LENGTH;
+      this.isEnteredSamePassword
     return !isSignUpBtnEnabled;
   }
 
   @action
-  async signUp() {
+  async signUp(event, checkInviteCode = false) {
     let inviteCode;
-    try {
-      [inviteCode] = await new this.liveQuery.AV.Query('InviteCode')
-        .equalTo('inviteCode', this.inviteCode)
-        .find();
-      if (!inviteCode || inviteCode.get('isVested')) {
+    if (checkInviteCode) {
+      try {
+        [inviteCode] = await new this.liveQuery.AV.Query('InviteCode')
+          .equalTo('inviteCode', this.inviteCode)
+          .find();
+        if (!inviteCode || inviteCode.get('isVested')) {
+          this.currentState = this.state.invalidInviteCode;
+          return;
+        } else {
+          inviteCode.set('isVested', true);
+          await inviteCode.save();
+        }
+      } catch (e) {
         this.currentState = this.state.invalidInviteCode;
         return;
-      } else {
-        inviteCode.set('isVested', true);
-        await inviteCode.save();
       }
-    } catch (e) {
-      this.currentState = this.state.invalidInviteCode;
-      return;
     }
 
     const result = await this.authentication.signUp(
@@ -67,9 +67,11 @@ export default class RegisterController extends Controller {
     if (result.status === 'succeed') {
       this.router.transitionTo('authentication.home');
     } else if (result.status === 'fail') {
-      // reset inviteCode if register is not successful
-      inviteCode.set('isVested', false);
-      inviteCode.save();
+      if (checkInviteCode) {
+        // reset inviteCode if register is not successful
+        inviteCode.set('isVested', false);
+        inviteCode.save();
+      }
 
       this.currentState = this.state.error;
       this.errorMessage = result.message;

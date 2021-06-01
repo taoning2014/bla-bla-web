@@ -337,7 +337,13 @@ export default class AuthenticationRoomController extends Controller {
       roomUserQuery.equalTo('userId', userId);
     }
 
-    const roomUsers = await roomUserQuery.find();
+    // If user run this repo first time, the following class does not exist and Leancould will throw error
+    let roomUsers;
+    try {
+      roomUsers = await roomUserQuery.find();
+    } catch (e) {
+      roomUsers = [];
+    }
 
     // Update the TrackedMap roomUsers with all of the new records returned
     roomUsers.forEach((roomUser) => {

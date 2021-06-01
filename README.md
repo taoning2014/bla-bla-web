@@ -20,8 +20,8 @@
 
 ## Credits
 
-- Development: Tao Ning(@tningjs) and Sean Johnson(seanjohnson08)
-- Design: Lora Zhang(@Tingzzz)
+- Development: Tao Ning([@tningjs](https://github.com/tningjs)) and Sean Johnson([@seanjohnson08](https://github.com/seanjohnson08))
+- Design: Lora Zhang([@Tingzzz](https://github.com/Tingzzz))
 - The project is inspired by [neshouse](https://neshouse.com/). We chose the same backend service, and CSS framework, many thanks to the author([@bestony](https://github.com/bestony))❤️ who kindly open source it. However, the code in this repo is written from scratch by using a different JS framework [Emberjs](https://emberjs.com/) and added a lot more features comparing to the open-source version.
 - The voice chat/message uses [Agora Web SDK](https://docs.agora.io/cn/Voice/API%20Reference/web_ng/index.html)
 - The data storage uses [LeanStorage SDK](https://docs.leancloud.app/leanstorage_guide-js.html)

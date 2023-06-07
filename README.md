@@ -1,5 +1,7 @@
 # bla-bla-web
 
+## [Demo Link (Mandarin)](https://www.bilibili.com/video/BV11Q4y1R72g/)
+
 ## Installation
 
 **Step 1:** Checkout and running the Ember CLI server(this repository):
